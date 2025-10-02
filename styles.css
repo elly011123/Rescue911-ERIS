@@ -1,0 +1,287 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    min-height: 100vh;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Panel styles */
+.panel {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.panel-content {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Emergency Call Panel */
+.emergency-panel {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(185, 28, 28, 0.3) 100%);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.emergency-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #fca5a5;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.emergency-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: #f1f5f9;
+    opacity: 0.9;
+}
+
+.call-button {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: white;
+    border: none;
+    padding: 1.5rem 3rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+}
+
+.call-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.6);
+}
+
+.call-button:active {
+    transform: translateY(0);
+}
+
+.disclaimer {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+/* Sign In Panel */
+.signin-panel {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.3) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.signin-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: #93c5fd;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.signin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #e2e8f0;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #cbd5e1;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+    color: #ffffff;
+}
+
+.signin-button {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 1rem;
+}
+
+.signin-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.signin-button:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .panel {
+        padding: 1.5rem;
+    }
+    
+    .emergency-title {
+        font-size: 2rem;
+    }
+    
+    .call-button {
+        padding: 1.2rem 2rem;
+        font-size: 1.2rem;
+    }
+    
+    .signin-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0.5rem;
+    }
+    
+    .panel {
+        padding: 1rem;
+        border-radius: 15px;
+    }
+    
+    .emergency-title {
+        font-size: 1.8rem;
+    }
+    
+    .call-button {
+        padding: 1rem 1.5rem;
+        font-size: 1.1rem;
+    }
+    
+    .signin-title {
+        font-size: 1.3rem;
+    }
+    
+    .form-group input,
+    .form-group select {
+        padding: 0.8rem;
+    }
+}
+
+/* Animation for form validation */
+.form-group input:invalid:not(:placeholder-shown) {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.form-group input:valid:not(:placeholder-shown) {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+}
+
+/* Loading state for buttons */
+.button-loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.button-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

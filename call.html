@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Call - ERIS</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .call-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .call-status {
+            background: rgba(220, 38, 38, 0.2);
+            border: 2px solid rgba(220, 38, 38, 0.5);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .call-title {
+            font-size: 2.5rem;
+            color: #fca5a5;
+            margin-bottom: 1rem;
+        }
+        
+        .call-subtitle {
+            font-size: 1.2rem;
+            color: #f1f5f9;
+            margin-bottom: 2rem;
+        }
+        
+        .call-button {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            border: none;
+            padding: 1.5rem 3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+        
+        .call-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.6);
+        }
+        
+        .back-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .emergency-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            max-width: 500px;
+        }
+        
+        .emergency-info h3 {
+            color: #93c5fd;
+            margin-bottom: 1rem;
+        }
+        
+        .emergency-info p {
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="call-container">
+        <div class="call-status">
+            <h1 class="call-title">Emergency Call</h1>
+            <p class="call-subtitle">Connecting you to emergency services...</p>
+            <button class="call-button" onclick="initiateCall()">Call Emergency Services</button>
+            <button class="call-button" onclick="showCallForm()" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); margin-top: 1rem;">Submit Call Details</button>
+            <p class="disclaimer">Stay calm and provide clear information about your emergency.</p>
+        </div>
+        
+        <div class="emergency-info">
+            <h3>Emergency Information</h3>
+            <p><strong>Your Location:</strong> <span id="location">Detecting...</span></p>
+            <p><strong>Call Time:</strong> <span id="callTime"></span></p>
+            <p><strong>Status:</strong> <span id="callStatus">Ready to connect</span></p>
+        </div>
+        
+        <a href="index.html" class="back-button">← Back to Home</a>
+    </div>
+
+    <script>
+        // Set current time
+        document.getElementById('callTime').textContent = new Date().toLocaleString();
+        
+        // Simulate location detection
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    document.getElementById('location').textContent = 
+                        `Lat: ${position.coords.latitude.toFixed(4)}, Lon: ${position.coords.longitude.toFixed(4)}`;
+                },
+                function(error) {
+                    document.getElementById('location').textContent = 'Location not available';
+                }
+            );
+        } else {
+            document.getElementById('location').textContent = 'Location not supported';
+        }
+        
+        function initiateCall() {
+            const callButton = document.querySelector('.call-button');
+            const callStatus = document.getElementById('callStatus');
+            
+            callButton.textContent = 'Connecting...';
+            callButton.disabled = true;
+            callStatus.textContent = 'Connecting to emergency services...';
+            
+            // Simulate call connection
+            setTimeout(() => {
+                callStatus.textContent = 'Connected to emergency operator';
+                callButton.textContent = 'Call Active';
+                callButton.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                
+                // Simulate call duration
+                let duration = 0;
+                const timer = setInterval(() => {
+                    duration++;
+                    const minutes = Math.floor(duration / 60);
+                    const seconds = duration % 60;
+                    callStatus.textContent = `Call Active - ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+                
+                // End call after 30 seconds (simulation)
+                setTimeout(() => {
+                    clearInterval(timer);
+                    callStatus.textContent = 'Call ended';
+                    callButton.textContent = 'Call Emergency Services';
+                    callButton.disabled = false;
+                    callButton.style.background = 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)';
+                }, 30000);
+            }, 2000);
+        }
+        
+        // Add form for call details
+        function showCallForm() {
+            const patientName = prompt('Patient Name:');
+            const phone = prompt('Phone Number:');
+            const address = prompt('Address:');
+            const landmark = prompt('Nearest Landmark:');
+            const description = prompt('Emergency Description:');
+            
+            if (patientName && address && description) {
+                // Save incoming call data to localStorage
+                const incomingCall = {
+                    patientName: patientName,
+                    phone: phone || '',
+                    address: address,
+                    landmark: landmark || '',
+                    description: description,
+                    ts: new Date().toISOString()
+                };
+                
+                localStorage.setItem('incomingCall', JSON.stringify(incomingCall));
+                
+                // Trigger storage event for real-time updates
+                window.dispatchEvent(new StorageEvent('storage', {
+                    key: 'incomingCall',
+                    newValue: JSON.stringify(incomingCall)
+                }));
+                
+                alert('Call details saved. Operator has been notified.');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard - ERIS</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .dashboard-container {
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .dashboard-title {
+            font-size: 2.5rem;
+            color: #8b5cf6;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-subtitle {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: #e2e8f0;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+        
+        .stat-positive {
+            color: #10b981;
+        }
+        
+        .stat-warning {
+            color: #f59e0b;
+        }
+        
+        .stat-danger {
+            color: #ef4444;
+        }
+        
+        .stat-info {
+            color: #3b82f6;
+        }
+        
+        .chart-container {
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .team-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .team-member {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .member-info {
+            flex: 1;
+        }
+        
+        .member-name {
+            color: #e2e8f0;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .member-role {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        .member-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-available {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .status-busy {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .status-offline {
+            background: rgba(107, 114, 128, 0.2);
+            color: #6b7280;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-1px);
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .alert-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .alert-item.warning {
+            border-left-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        
+        .alert-item.danger {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .alert-title {
+            color: #e2e8f0;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .alert-message {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+        
+        .alert-time {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">← Back to Home</a>
+    
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Manager Dashboard</h1>
+            <p class="dashboard-subtitle">Emergency Response System Management</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number stat-info" id="totalCalls">47</div>
+                <div class="stat-label">Total Calls Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number stat-positive" id="resolvedCalls">42</div>
+                <div class="stat-label">Resolved</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number stat-warning" id="activeCalls">5</div>
+                <div class="stat-label">Active</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number stat-positive" id="avgResponse">5.2</div>
+                <div class="stat-label">Avg Response (min)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number stat-info" id="teamMembers">12</div>
+                <div class="stat-label">Team Members</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number stat-positive" id="availableUnits">8</div>
+                <div class="stat-label">Available Units</div>
+            </div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h2 class="card-title">📊 System Overview</h2>
+                <div class="chart-container">
+                    <div>
+                        <h4>Response Time Trends</h4>
+                        <p>Average response time: 5.2 minutes</p>
+                        <p>Target: 8.0 minutes</p>
+                        <p style="color: #10b981;">✓ Meeting performance targets</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <h2 class="card-title">👥 Team Status</h2>
+                <div class="team-list">
+                    <div class="team-member">
+                        <div class="member-info">
+                            <div class="member-name">Sarah Johnson</div>
+                            <div class="member-role">Call Operator</div>
+                        </div>
+                        <div class="action-buttons">
+                            <span class="member-status status-available">Available</span>
+                            <button class="btn btn-primary" onclick="viewMember(1)">View</button>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-info">
+                            <div class="member-name">Mike Chen</div>
+                            <div class="member-role">EMT Lead</div>
+                        </div>
+                        <div class="action-buttons">
+                            <span class="member-status status-busy">On Call</span>
+                            <button class="btn btn-primary" onclick="viewMember(2)">View</button>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-info">
+                            <div class="member-name">Lisa Rodriguez</div>
+                            <div class="member-role">EMT</div>
+                        </div>
+                        <div class="action-buttons">
+                            <span class="member-status status-available">Available</span>
+                            <button class="btn btn-primary" onclick="viewMember(3)">View</button>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-info">
+                            <div class="member-name">David Kim</div>
+                            <div class="member-role">Call Operator</div>
+                        </div>
+                        <div class="action-buttons">
+                            <span class="member-status status-busy">On Call</span>
+                            <button class="btn btn-primary" onclick="viewMember(4)">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <h2 class="card-title">🚨 System Alerts</h2>
+                <div id="alertsList">
+                    <div class="alert-item warning">
+                        <div class="alert-title">High Call Volume</div>
+                        <div class="alert-message">Call volume is 20% above average. Consider activating additional operators.</div>
+                        <div class="alert-time">5 minutes ago</div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-title">System Update</div>
+                        <div class="alert-message">Emergency response system updated successfully. All features operational.</div>
+                        <div class="alert-time">1 hour ago</div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-title">Equipment Check</div>
+                        <div class="alert-message">All emergency vehicles passed routine inspection.</div>
+                        <div class="alert-time">2 hours ago</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <h2 class="card-title">📈 Performance Metrics</h2>
+                <div class="chart-container">
+                    <div>
+                        <h4>Monthly Performance</h4>
+                        <p><strong>Response Time:</strong> 5.2 min (Target: 8.0 min)</p>
+                        <p><strong>Resolution Rate:</strong> 89% (Target: 85%)</p>
+                        <p><strong>Customer Satisfaction:</strong> 4.7/5.0</p>
+                        <p><strong>System Uptime:</strong> 99.8%</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <h2 class="card-title">🔧 System Controls</h2>
+                <div class="action-buttons" style="flex-direction: column; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="generateReport()">Generate Report</button>
+                    <button class="btn btn-warning" onclick="systemMaintenance()">System Maintenance</button>
+                    <button class="btn btn-success" onclick="addTeamMember()">Add Team Member</button>
+                    <button class="btn btn-danger" onclick="emergencyProtocol()">Emergency Protocol</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <h2 class="card-title">📋 Recent Activity</h2>
+                <div class="team-list">
+                    <div class="team-member">
+                        <div class="member-info">
+                            <div class="member-name">Emergency Call #1247</div>
+                            <div class="member-role">Medical emergency - 123 Main St</div>
+                        </div>
+                        <div class="action-buttons">
+                            <span class="member-status status-busy">In Progress</span>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-info">
+                            <div class="member-name">Emergency Call #1246</div>
+                            <div class="member-role">Traffic accident - Highway 101</div>
+                        </div>
+                        <div class="action-buttons">
+                            <span class="member-status status-available">Resolved</span>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-info">
+                            <div class="member-name">System Alert</div>
+                            <div class="member-role">High call volume detected</div>
+                        </div>
+                        <div class="action-buttons">
+                            <span class="member-status status-warning">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function viewMember(memberId) {
+            alert(`Viewing details for team member #${memberId}`);
+        }
+        
+        function generateReport() {
+            if (confirm('Generate system performance report?')) {
+                alert('Report generation started. You will be notified when ready.');
+            }
+        }
+        
+        function systemMaintenance() {
+            if (confirm('Schedule system maintenance? This will temporarily reduce system capacity.')) {
+                alert('Maintenance scheduled for tonight at 2 AM.');
+            }
+        }
+        
+        function addTeamMember() {
+            const name = prompt('Enter new team member name:');
+            const role = prompt('Enter role (Call Operator/EMT/Manager):');
+            if (name && role) {
+                alert(`New team member ${name} added as ${role}`);
+            }
+        }
+        
+        function emergencyProtocol() {
+            if (confirm('Activate emergency protocol? This will alert all team members.')) {
+                alert('Emergency protocol activated! All team members have been notified.');
+            }
+        }
+        
+        // Simulate real-time updates
+        function updateStats() {
+            // This would typically fetch from an API
+            const totalCalls = Math.floor(Math.random() * 10) + 40;
+            const resolvedCalls = Math.floor(totalCalls * 0.9);
+            const activeCalls = totalCalls - resolvedCalls;
+            const avgResponse = (Math.random() * 2 + 4).toFixed(1);
+            const availableUnits = Math.floor(Math.random() * 5) + 6;
+            
+            document.getElementById('totalCalls').textContent = totalCalls;
+            document.getElementById('resolvedCalls').textContent = resolvedCalls;
+            document.getElementById('activeCalls').textContent = activeCalls;
+            document.getElementById('avgResponse').textContent = avgResponse;
+            document.getElementById('availableUnits').textContent = availableUnits;
+        }
+        
+        // Update stats every 30 seconds
+        setInterval(updateStats, 30000);
+        
+        // Initial stats update
+        updateStats();
+    </script>
+</body>
+</html>

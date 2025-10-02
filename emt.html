@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMT Dashboard - ERIS</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .dashboard-container {
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .dashboard-title {
+            font-size: 2.5rem;
+            color: #10b981;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-subtitle {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: #e2e8f0;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .assignment-card {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .assignment-title {
+            font-size: 1.8rem;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+        
+        .assignment-details {
+            color: #e2e8f0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .assignment-details p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .priority-high {
+            color: #ef4444;
+            font-weight: 700;
+        }
+        
+        .priority-medium {
+            color: #f59e0b;
+            font-weight: 700;
+        }
+        
+        .priority-low {
+            color: #10b981;
+            font-weight: 700;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        
+        .status-available {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .status-on-call {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .status-en-route {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+        
+        .patient-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .patient-info h4 {
+            color: #93c5fd;
+            margin-bottom: 1rem;
+        }
+        
+        .patient-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .patient-detail {
+            color: #e2e8f0;
+        }
+        
+        .patient-detail strong {
+            color: #cbd5e1;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .no-assignment {
+            text-align: center;
+            color: #94a3b8;
+            font-style: italic;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">← Back to Home</a>
+    
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">EMT Dashboard</h1>
+            <p class="dashboard-subtitle">Emergency Medical Technician Operations</p>
+            <div class="status-indicator status-available">Available</div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h2 class="card-title">🚑 Current Assignment</h2>
+                <div id="currentAssignment">
+                    <div class="assignment-card">
+                        <h3 class="assignment-title">Medical Emergency</h3>
+                        <div class="assignment-details">
+                            <p><strong>Location:</strong> 123 Main St, Downtown</p>
+                            <p><strong>Priority:</strong> <span class="priority-high">HIGH</span></p>
+                            <p><strong>ETA:</strong> 8 minutes</p>
+                            <p><strong>Call Time:</strong> 2 minutes ago</p>
+                        </div>
+                        
+                        <div class="patient-info">
+                            <h4>Patient Information</h4>
+                            <div class="patient-details">
+                                <div class="patient-detail">
+                                    <strong>Age:</strong> 45 years
+                                </div>
+                                <div class="patient-detail">
+                                    <strong>Condition:</strong> Chest pain
+                                </div>
+                                <div class="patient-detail">
+                                    <strong>Vitals:</strong> Stable
+                                </div>
+                                <div class="patient-detail">
+                                    <strong>Allergies:</strong> None known
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-success" onclick="acceptAssignment()">Accept Assignment</button>
+                            <button class="btn btn-warning" onclick="requestBackup()">Request Backup</button>
+                            <button class="btn btn-danger" onclick="declineAssignment()">Decline</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <h2 class="card-title">📋 Equipment Status</h2>
+                <div id="equipmentStatus">
+                    <div class="patient-info">
+                        <h4>Medical Equipment</h4>
+                        <div class="patient-details">
+                            <div class="patient-detail">
+                                <strong>Defibrillator:</strong> <span style="color: #10b981;">✓ Ready</span>
+                            </div>
+                            <div class="patient-detail">
+                                <strong>Oxygen Tank:</strong> <span style="color: #10b981;">✓ Full</span>
+                            </div>
+                            <div class="patient-detail">
+                                <strong>First Aid Kit:</strong> <span style="color: #10b981;">✓ Complete</span>
+                            </div>
+                            <div class="patient-detail">
+                                <strong>Stretcher:</strong> <span style="color: #10b981;">✓ Available</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="patient-info">
+                        <h4>Vehicle Status</h4>
+                        <div class="patient-details">
+                            <div class="patient-detail">
+                                <strong>Fuel Level:</strong> 85%
+                            </div>
+                            <div class="patient-detail">
+                                <strong>Mileage:</strong> 45,230 mi
+                            </div>
+                            <div class="patient-detail">
+                                <strong>Last Service:</strong> 2 weeks ago
+                            </div>
+                            <div class="patient-detail">
+                                <strong>Status:</strong> <span style="color: #10b981;">Operational</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <h2 class="card-title">📊 Today's Activity</h2>
+                <div id="todayActivity">
+                    <div class="patient-info">
+                        <h4>Completed Calls</h4>
+                        <div class="patient-details">
+                            <div class="patient-detail">
+                                <strong>Total Calls:</strong> 8
+                            </div>
+                            <div class="patient-detail">
+                                <strong>Medical Emergencies:</strong> 5
+                            </div>
+                            <div class="patient-detail">
+                                <strong>Traffic Accidents:</strong> 2
+                            </div>
+                            <div class="patient-detail">
+                                <strong>Other:</strong> 1
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="patient-info">
+                        <h4>Response Times</h4>
+                        <div class="patient-details">
+                            <div class="patient-detail">
+                                <strong>Average:</strong> 6.2 min
+                            </div>
+                            <div class="patient-detail">
+                                <strong>Fastest:</strong> 3.1 min
+                            </div>
+                            <div class="patient-detail">
+                                <strong>Longest:</strong> 12.5 min
+                            </div>
+                            <div class="patient-detail">
+                                <strong>Target:</strong> 8.0 min
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function acceptAssignment() {
+            if (confirm('Accept this assignment?')) {
+                alert('Assignment accepted! Updating status...');
+                updateEMTStatus('on-call');
+                // Update UI to show assignment accepted
+            }
+        }
+        
+        function requestBackup() {
+            if (confirm('Request backup for this assignment?')) {
+                alert('Backup requested! Additional EMT units will be notified.');
+            }
+        }
+        
+        function declineAssignment() {
+            if (confirm('Are you sure you want to decline this assignment?')) {
+                alert('Assignment declined. Returning to available status.');
+                updateEMTStatus('available');
+            }
+        }
+        
+        function updateEMTStatus(status) {
+            const statusIndicator = document.querySelector('.status-indicator');
+            const statusText = document.querySelector('.status-indicator');
+            
+            switch(status) {
+                case 'available':
+                    statusIndicator.className = 'status-indicator status-available';
+                    statusText.textContent = 'Available';
+                    break;
+                case 'on-call':
+                    statusIndicator.className = 'status-indicator status-on-call';
+                    statusText.textContent = 'On Call';
+                    break;
+                case 'en-route':
+                    statusIndicator.className = 'status-indicator status-en-route';
+                    statusText.textContent = 'En Route';
+                    break;
+            }
+        }
+        
+        // Simulate real-time updates
+        function updateEquipmentStatus() {
+            // This would typically fetch from an API
+            // For demo purposes, we'll just show static data
+        }
+        
+        // Update equipment status every 30 seconds
+        setInterval(updateEquipmentStatus, 30000);
+        
+        // Initial update
+        updateEquipmentStatus();
+    </script>
+</body>
+</html>
