@@ -94,6 +94,12 @@
             margin-bottom: 0.5rem;
         }
     </style>
+<script>
+window.storage = window.storage || {
+  get: async function(k){ return { value: localStorage.getItem(k) }; },
+  set: async function(k,v){ localStorage.setItem(k,v); }
+};
+</script>
 </head>
 <body>
     <div class="call-container">
@@ -199,5 +205,31 @@
             }
         }
     </script>
+<script>
+function setIncomingCallStorage(data){
+  try {
+    localStorage.setItem('incomingCall', JSON.stringify(data));
+    if (window.storage && window.storage.set) {
+      window.storage.set('incomingCall', JSON.stringify(data));
+    }
+  } catch(e) {}
+}
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var form = document.querySelector('form');
+  if (!form) return;
+  form.addEventListener('submit', function(ev){
+    // try to read fields if exist
+    var data = {
+      patientName: (document.getElementById('callerName') || {}).value || (document.getElementById('patientName') || {}).value || '',
+      phone: (document.getElementById('callerPhone') || {}).value || (document.getElementById('phone') || {}).value || '',
+      address: (document.getElementById('address') || {}).value || '',
+      description: (document.getElementById('description') || {}).value || (document.getElementById('incidentDescription') || {}).value || ''
+    };
+    setIncomingCallStorage(data);
+  }, true);
+});
+</script>
 </body>
 </html>

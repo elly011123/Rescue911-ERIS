@@ -402,6 +402,12 @@
             margin-top: 0.5rem;
         }
     </style>
+<script>
+window.storage = window.storage || {
+  get: async function(k){ return { value: localStorage.getItem(k) }; },
+  set: async function(k,v){ localStorage.setItem(k,v); }
+};
+</script>
 </head>
 <body>
     <a href="index.html" class="back-button">← Back to Home</a>
@@ -811,6 +817,29 @@
         
         // Assign EMT to call
         async function assignEMT(emtId) {
+  // patched: write assignment into latest unassigned active call
+  (async function(){
+    try{
+      const res = await window.storage.get('emergency-calls');
+      const calls = res && res.value ? JSON.parse(res.value) : [];
+      const emtRes = await window.storage.get('emt-units');
+      const emts = emtRes && emtRes.value ? JSON.parse(emtRes.value) : [];
+      const emt = emts.find(e => e.id === emtId) || emts.find(e => e.id === (typeof emtId!=='undefined'?emtId:null));
+      const target = [...calls].reverse().find(c => c.status === 'Active' && !c.assignedEMTId);
+      if (!target){ try{ showNotification && showNotification('배정할 활성 콜이 없습니다','error'); }catch(_){ alert('배정할 활성 콜이 없습니다'); } return; }
+      if (emt){
+        target.assignedEMTId = emt.id;
+        target.assignedEMTName = emt.name || emt.id;
+        target.status = 'In Progress';
+        await window.storage.set('emergency-calls', JSON.stringify(calls));
+        await window.storage.set('emt-units', JSON.stringify(emts));
+        try{ renderEMTList && renderEMTList(); updateStats && updateStats(); }catch(_){}
+        try{ showNotification && showNotification('배정 완료: ' + (emt.name || emt.id),'success'); }catch(_){ alert('배정 완료'); }
+        localStorage.setItem('calls-updated', Date.now().toString());
+      }
+    }catch(err){ console.error(err); }
+  })();
+
             if (calls.length === 0) {
                 showNotification('No active calls to assign', 'error');
                 return;
@@ -824,3 +853,42 @@
                 emt.status = 'busy';
                 await window.storage.set('emt-units', JSON.stringify(emts));
                 
+<script>
+(async function(){
+  const res = await window.storage.get('patients'); 
+  window.patients = res && res.value ? JSON.parse(res.value) : [];
+  const cres = await window.storage.get('emergency-calls');
+  window.calls = cres && cres.value ? JSON.parse(cres.value) : [];
+
+  function selectPatientByObj(p){
+    try { if (typeof selectPatient === 'function') selectPatient(p); } catch(e){}
+  }
+
+  window.addEventListener('storage', async function(e){
+    if (e.key !== 'incomingCall') return;
+    var data = {};
+    try { data = JSON.parse(e.newValue || '{}'); } catch(err){}
+    if (!data || (!data.patientName && !data.phone && !data.address)) return;
+
+    var parts = (data.patientName || '').trim().split(' ');
+    var firstName = parts.shift() || '';
+    var lastName = parts.join(' ');
+
+    var phone = data.phone || '';
+    var found = window.patients.find(p => phone && p.phoneNumber === phone);
+    if (!found){
+      found = { patientId: 'P'+Date.now(), firstName: firstName, lastName: lastName, phoneNumber: phone, dateOfBirth: '', createdAt: new Date().toISOString() };
+      window.patients.push(found);
+      await window.storage.set('patients', JSON.stringify(window.patients));
+    }
+    selectPatientByObj(found);
+
+    var addrEl = document.getElementById('address');
+    if (addrEl) addrEl.value = data.address || '';
+    var descEl = document.getElementById('incidentDescription');
+    if (descEl) descEl.value = data.description || '';
+    var prioEl = document.getElementById('priority');
+    if (prioEl) prioEl.value = 'High';
+  }, false);
+})();
+</script>

@@ -31,9 +31,15 @@
             box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
         }
     </style>
+<script>
+window.storage = window.storage || {
+  get: async function(k){ return { value: localStorage.getItem(k) }; },
+  set: async function(k,v){ localStorage.setItem(k,v); }
+};
+</script>
 </head>
 <body>
-    <a href="clock.html" class="utility-button">
+    <a href="clock_system.html" class="utility-button">
         ⏰ Time Clock
     </a>
     
@@ -43,7 +49,7 @@
             <div class="panel-content">
                 <h1 class="emergency-title">Emergency Call</h1>
                 <p class="emergency-subtitle">If you face an emergency, click below to connect with a call operator.</p>
-                <button class="call-button" onclick="navigateToCall()">Call Now</button>
+                <a href="call.html" class="call-button" style="display:inline-block;text-decoration:none;text-align:center;">Call Now</a>
                 <p class="disclaimer">Misuse may be prosecuted.</p>
             </div>
         </div>

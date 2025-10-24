@@ -438,6 +438,12 @@
             font-size: 1rem;
         }
     </style>
+<script>
+window.storage = window.storage || {
+  get: async function(k){ return { value: localStorage.getItem(k) }; },
+  set: async function(k,v){ localStorage.setItem(k,v); }
+};
+</script>
 </head>
 <body>
     <a href="index.html" class="back-button">← Back to Home</a>
@@ -1173,5 +1179,18 @@
             });
         }
     </script>
+<script>
+window.addEventListener('storage', async function(e){
+  if (e.key === 'calls-updated'){
+    try{
+      if (typeof loadAllData === 'function') await loadAllData();
+      if (typeof currentTab !== 'undefined'){
+        if (currentTab === 'overview' && typeof updateOverview === 'function') updateOverview();
+        if (currentTab === 'dispatch' && typeof renderDispatchHistory === 'function') renderDispatchHistory();
+      }
+    }catch(err){ console.error(err); }
+  }
+}, false);
+</script>
 </body>
 </html>

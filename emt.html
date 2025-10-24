@@ -229,6 +229,12 @@
             padding: 2rem;
         }
     </style>
+<script>
+window.storage = window.storage || {
+  get: async function(k){ return { value: localStorage.getItem(k) }; },
+  set: async function(k,v){ localStorage.setItem(k,v); }
+};
+</script>
 </head>
 <body>
     <a href="index.html" class="back-button">← Back to Home</a>
@@ -272,6 +278,7 @@
                         </div>
                         
                         <div class="action-buttons">
+<button class="btn btn-primary" onclick="completeAssignment()">Complete Call</button>
                             <button class="btn btn-success" onclick="acceptAssignment()">Accept Assignment</button>
                             <button class="btn btn-warning" onclick="requestBackup()">Request Backup</button>
                             <button class="btn btn-danger" onclick="declineAssignment()">Decline</button>
@@ -418,5 +425,29 @@
         // Initial update
         updateEquipmentStatus();
     </script>
+<script>
+async function completeAssignment(){
+  try{
+    const username = localStorage.getItem('username') || 'EMT-001';
+    const callsRes = await window.storage.get('emergency-calls');
+    const calls = callsRes && callsRes.value ? JSON.parse(callsRes.value) : [];
+    const myCall = [...calls].reverse().find(c => c.assignedEMTId === username && c.status !== 'Completed');
+    if (!myCall){ alert('진행 중인 콜 없음'); return; }
+    myCall.status = 'Completed';
+    myCall.completedAt = new Date().toISOString();
+    await window.storage.set('emergency-calls', JSON.stringify(calls));
+
+    const emtRes = await window.storage.get('emt-units');
+    const emts = emtRes && emtRes.value ? JSON.parse(emtRes.value) : [];
+    const me = emts.find(e => e.id === username);
+    if (me){ me.status = 'available'; }
+    await window.storage.set('emt-units', JSON.stringify(emts));
+
+    alert('콜 완료 처리됨');
+    if (typeof updateEMTStatus === 'function') updateEMTStatus('available');
+    localStorage.setItem('calls-updated', Date.now().toString());
+  }catch(e){ console.error(e); alert('오류가 발생했습니다'); }
+}
+</script>
 </body>
 </html>
