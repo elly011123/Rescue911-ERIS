@@ -13,7 +13,7 @@
         
         .dashboard-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
         
         .dashboard-title {
@@ -27,12 +27,42 @@
             font-size: 1.1rem;
         }
         
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
+        .tab-navigation {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab-button {
+            padding: 1rem 2rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            border-color: #8b5cf6;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
         }
         
         .dashboard-card {
@@ -42,15 +72,164 @@
             padding: 2rem;
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
         }
         
         .card-title {
             font-size: 1.5rem;
             color: #e2e8f0;
             margin-bottom: 1rem;
+        }
+        
+        .filter-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-group {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .filter-group input,
+        .filter-group select {
+            padding: 0.75rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .data-table th {
+            background: rgba(255, 255, 255, 0.05);
+            color: #93c5fd;
+            font-weight: 600;
+        }
+        
+        .data-table td {
+            color: #e2e8f0;
+        }
+        
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-completed {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .status-in-progress {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+        
+        .status-cancelled {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .status-compliant {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .status-needs-review {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+        
+        .status-non-compliant {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .priority-critical {
+            color: #ef4444;
+            font-weight: 700;
+        }
+        
+        .priority-high {
+            color: #f59e0b;
+            font-weight: 700;
+        }
+        
+        .priority-medium {
+            color: #3b82f6;
+        }
+        
+        .priority-low {
+            color: #6b7280;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .btn-export {
+            background: #8b5cf6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-export:hover {
+            background: #7c3aed;
         }
         
         .stats-grid {
@@ -82,137 +261,12 @@
             color: #10b981;
         }
         
-        .stat-warning {
-            color: #f59e0b;
-        }
-        
-        .stat-danger {
-            color: #ef4444;
-        }
-        
         .stat-info {
             color: #3b82f6;
         }
         
-        .chart-container {
-            height: 300px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #94a3b8;
-            font-style: italic;
-        }
-        
-        .team-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        .team-member {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .member-info {
-            flex: 1;
-        }
-        
-        .member-name {
-            color: #e2e8f0;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        
-        .member-role {
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-        
-        .member-status {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        
-        .status-available {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-        }
-        
-        .status-busy {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-        }
-        
-        .status-offline {
-            background: rgba(107, 114, 128, 0.2);
-            color: #6b7280;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary {
-            background: #3b82f6;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
-        }
-        
-        .btn-success {
-            background: #10b981;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #059669;
-            transform: translateY(-1px);
-        }
-        
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background: #dc2626;
-            transform: translateY(-1px);
-        }
-        
-        .btn-warning {
-            background: #f59e0b;
-            color: white;
-        }
-        
-        .btn-warning:hover {
-            background: #d97706;
-            transform: translateY(-1px);
+        .stat-warning {
+            color: #f59e0b;
         }
         
         .back-button {
@@ -227,47 +281,161 @@
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            display: inline-block;
         }
         
         .back-button:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
         }
         
-        .alert-item {
+        .detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .detail-modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: #93c5fd;
+        }
+        
+        .close-button {
+            background: none;
+            border: none;
+            color: #e2e8f0;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .detail-grid {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .detail-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .detail-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .detail-value {
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #94a3b8;
+            padding: 3rem;
+            font-style: italic;
+        }
+        
+        .response-good {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .response-fair {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+        
+        .response-poor {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        
+        /* Employee Management */
+        .employee-list {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .employee-card {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            align-items: center;
         }
         
-        .alert-item.warning {
-            border-left-color: #f59e0b;
-            background: rgba(245, 158, 11, 0.1);
-        }
-        
-        .alert-item.danger {
-            border-left-color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-        }
-        
-        .alert-title {
+        .employee-info h3 {
             color: #e2e8f0;
-            font-weight: 600;
             margin-bottom: 0.5rem;
         }
         
-        .alert-message {
-            color: #cbd5e1;
+        .employee-details {
+            color: #94a3b8;
             font-size: 0.9rem;
         }
         
-        .alert-time {
-            color: #94a3b8;
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
+        .employee-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 0.75rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
         }
     </style>
 </head>
@@ -280,223 +448,730 @@
             <p class="dashboard-subtitle">Emergency Response System Management</p>
         </div>
         
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number stat-info" id="totalCalls">47</div>
-                <div class="stat-label">Total Calls Today</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number stat-positive" id="resolvedCalls">42</div>
-                <div class="stat-label">Resolved</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number stat-warning" id="activeCalls">5</div>
-                <div class="stat-label">Active</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number stat-positive" id="avgResponse">5.2</div>
-                <div class="stat-label">Avg Response (min)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number stat-info" id="teamMembers">12</div>
-                <div class="stat-label">Team Members</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number stat-positive" id="availableUnits">8</div>
-                <div class="stat-label">Available Units</div>
+        <div class="tab-navigation">
+            <button class="tab-button active" onclick="switchTab('overview')">Overview</button>
+            <button class="tab-button" onclick="switchTab('dispatch')">Dispatch History</button>
+            <button class="tab-button" onclick="switchTab('treatment')">Treatment Review</button>
+            <button class="tab-button" onclick="switchTab('employees')">Employee Management</button>
+        </div>
+        
+        <!-- Overview Tab -->
+        <div id="overview-tab" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number stat-info" id="totalCalls">0</div>
+                    <div class="stat-label">Total Calls Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number stat-positive" id="resolvedCalls">0</div>
+                    <div class="stat-label">Resolved</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number stat-warning" id="activeCalls">0</div>
+                    <div class="stat-label">Active</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number stat-positive" id="avgResponse">0</div>
+                    <div class="stat-label">Avg Response (min)</div>
+                </div>
             </div>
         </div>
         
-        <div class="dashboard-grid">
+        <!-- Dispatch History Tab -->
+        <div id="dispatch-tab" class="tab-content">
             <div class="dashboard-card">
-                <h2 class="card-title">📊 System Overview</h2>
-                <div class="chart-container">
-                    <div>
-                        <h4>Response Time Trends</h4>
-                        <p>Average response time: 5.2 minutes</p>
-                        <p>Target: 8.0 minutes</p>
-                        <p style="color: #10b981;">✓ Meeting performance targets</p>
+                <h2 class="card-title">📊 Dispatch History</h2>
+                
+                <div class="filter-section">
+                    <div class="filter-group">
+                        <label for="dateFrom">From Date</label>
+                        <input type="date" id="dateFrom">
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateTo">To Date</label>
+                        <input type="date" id="dateTo">
+                    </div>
+                    <div class="filter-group">
+                        <label for="statusFilter">Status</label>
+                        <select id="statusFilter">
+                            <option value="">All Statuses</option>
+                            <option value="Completed">Completed</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="priorityFilter">Priority</label>
+                        <select id="priorityFilter">
+                            <option value="">All Priorities</option>
+                            <option value="Critical">Critical</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
                     </div>
                 </div>
-            </div>
-            
-            <div class="dashboard-card">
-                <h2 class="card-title">👥 Team Status</h2>
-                <div class="team-list">
-                    <div class="team-member">
-                        <div class="member-info">
-                            <div class="member-name">Sarah Johnson</div>
-                            <div class="member-role">Call Operator</div>
-                        </div>
-                        <div class="action-buttons">
-                            <span class="member-status status-available">Available</span>
-                            <button class="btn btn-primary" onclick="viewMember(1)">View</button>
-                        </div>
-                    </div>
-                    <div class="team-member">
-                        <div class="member-info">
-                            <div class="member-name">Mike Chen</div>
-                            <div class="member-role">EMT Lead</div>
-                        </div>
-                        <div class="action-buttons">
-                            <span class="member-status status-busy">On Call</span>
-                            <button class="btn btn-primary" onclick="viewMember(2)">View</button>
-                        </div>
-                    </div>
-                    <div class="team-member">
-                        <div class="member-info">
-                            <div class="member-name">Lisa Rodriguez</div>
-                            <div class="member-role">EMT</div>
-                        </div>
-                        <div class="action-buttons">
-                            <span class="member-status status-available">Available</span>
-                            <button class="btn btn-primary" onclick="viewMember(3)">View</button>
-                        </div>
-                    </div>
-                    <div class="team-member">
-                        <div class="member-info">
-                            <div class="member-name">David Kim</div>
-                            <div class="member-role">Call Operator</div>
-                        </div>
-                        <div class="action-buttons">
-                            <span class="member-status status-busy">On Call</span>
-                            <button class="btn btn-primary" onclick="viewMember(4)">View</button>
-                        </div>
-                    </div>
+                
+                <button class="btn btn-export" onclick="exportDispatchHistory()">📥 Export to CSV</button>
+                
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Call ID</th>
+                                <th>Patient</th>
+                                <th>Location</th>
+                                <th>EMT Assigned</th>
+                                <th>Time</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dispatchTableBody"></tbody>
+                    </table>
                 </div>
             </div>
-            
+        </div>
+        
+        <!-- Treatment Review Tab -->
+        <div id="treatment-tab" class="tab-content">
             <div class="dashboard-card">
-                <h2 class="card-title">🚨 System Alerts</h2>
-                <div id="alertsList">
-                    <div class="alert-item warning">
-                        <div class="alert-title">High Call Volume</div>
-                        <div class="alert-message">Call volume is 20% above average. Consider activating additional operators.</div>
-                        <div class="alert-time">5 minutes ago</div>
+                <h2 class="card-title">🏥 Patient Treatment Review</h2>
+                
+                <div class="filter-section">
+                    <div class="filter-group">
+                        <label for="treatmentDateFrom">From Date</label>
+                        <input type="date" id="treatmentDateFrom">
                     </div>
-                    <div class="alert-item">
-                        <div class="alert-title">System Update</div>
-                        <div class="alert-message">Emergency response system updated successfully. All features operational.</div>
-                        <div class="alert-time">1 hour ago</div>
+                    <div class="filter-group">
+                        <label for="treatmentDateTo">To Date</label>
+                        <input type="date" id="treatmentDateTo">
                     </div>
-                    <div class="alert-item">
-                        <div class="alert-title">Equipment Check</div>
-                        <div class="alert-message">All emergency vehicles passed routine inspection.</div>
-                        <div class="alert-time">2 hours ago</div>
+                    <div class="filter-group">
+                        <label for="complianceFilter">Compliance</label>
+                        <select id="complianceFilter">
+                            <option value="">All</option>
+                            <option value="Compliant">Compliant</option>
+                            <option value="Needs Review">Needs Review</option>
+                            <option value="Non-Compliant">Non-Compliant</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="protocolFilter">Protocol</label>
+                        <select id="protocolFilter">
+                            <option value="">All Protocols</option>
+                            <option value="Cardiac Arrest">Cardiac Arrest</option>
+                            <option value="Respiratory Distress">Respiratory Distress</option>
+                            <option value="Trauma">Trauma</option>
+                            <option value="Stroke">Stroke</option>
+                        </select>
                     </div>
                 </div>
-            </div>
-            
-            <div class="dashboard-card">
-                <h2 class="card-title">📈 Performance Metrics</h2>
-                <div class="chart-container">
-                    <div>
-                        <h4>Monthly Performance</h4>
-                        <p><strong>Response Time:</strong> 5.2 min (Target: 8.0 min)</p>
-                        <p><strong>Resolution Rate:</strong> 89% (Target: 85%)</p>
-                        <p><strong>Customer Satisfaction:</strong> 4.7/5.0</p>
-                        <p><strong>System Uptime:</strong> 99.8%</p>
-                    </div>
+                
+                <button class="btn btn-export" onclick="exportTreatmentRecords()">📥 Export to CSV</button>
+                
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Treatment ID</th>
+                                <th>Patient</th>
+                                <th>Protocol</th>
+                                <th>EMT</th>
+                                <th>Date/Time</th>
+                                <th>Compliance</th>
+                                <th>Score</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="treatmentTableBody"></tbody>
+                    </table>
                 </div>
             </div>
-            
+        </div>
+        
+        <!-- Employee Management Tab -->
+        <div id="employees-tab" class="tab-content">
             <div class="dashboard-card">
-                <h2 class="card-title">🔧 System Controls</h2>
-                <div class="action-buttons" style="flex-direction: column; gap: 1rem;">
-                    <button class="btn btn-primary" onclick="generateReport()">Generate Report</button>
-                    <button class="btn btn-warning" onclick="systemMaintenance()">System Maintenance</button>
-                    <button class="btn btn-success" onclick="addTeamMember()">Add Team Member</button>
-                    <button class="btn btn-danger" onclick="emergencyProtocol()">Emergency Protocol</button>
-                </div>
+                <h2 class="card-title">👥 Employee Management</h2>
+                
+                <button class="btn btn-success" style="margin-bottom: 1rem;" onclick="showAddEmployeeModal()">
+                    + Add New Employee
+                </button>
+                
+                <div id="employeeList" class="employee-list"></div>
             </div>
-            
-            <div class="dashboard-card">
-                <h2 class="card-title">📋 Recent Activity</h2>
-                <div class="team-list">
-                    <div class="team-member">
-                        <div class="member-info">
-                            <div class="member-name">Emergency Call #1247</div>
-                            <div class="member-role">Medical emergency - 123 Main St</div>
-                        </div>
-                        <div class="action-buttons">
-                            <span class="member-status status-busy">In Progress</span>
-                        </div>
+        </div>
+    </div>
+    
+    <!-- Detail Modal -->
+    <div id="detailModal" class="detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Details</h3>
+                <button class="close-button" onclick="closeModal()">×</button>
+            </div>
+            <div id="modalBody" class="detail-grid"></div>
+        </div>
+    </div>
+    
+    <!-- Employee Edit Modal -->
+    <div id="employeeModal" class="detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="employeeModalTitle">Employee Details</h3>
+                <button class="close-button" onclick="closeEmployeeModal()">×</button>
+            </div>
+            <form id="employeeForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="empFirstName">First Name *</label>
+                        <input type="text" id="empFirstName" required>
                     </div>
-                    <div class="team-member">
-                        <div class="member-info">
-                            <div class="member-name">Emergency Call #1246</div>
-                            <div class="member-role">Traffic accident - Highway 101</div>
-                        </div>
-                        <div class="action-buttons">
-                            <span class="member-status status-available">Resolved</span>
-                        </div>
-                    </div>
-                    <div class="team-member">
-                        <div class="member-info">
-                            <div class="member-name">System Alert</div>
-                            <div class="member-role">High call volume detected</div>
-                        </div>
-                        <div class="action-buttons">
-                            <span class="member-status status-warning">Active</span>
-                        </div>
+                    <div class="form-group">
+                        <label for="empLastName">Last Name *</label>
+                        <input type="text" id="empLastName" required>
                     </div>
                 </div>
-            </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="empEmail">Email *</label>
+                        <input type="email" id="empEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="empPhone">Phone *</label>
+                        <input type="tel" id="empPhone" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="empRole">Role *</label>
+                        <select id="empRole" required>
+                            <option value="">Select Role</option>
+                            <option value="operator">Call Operator</option>
+                            <option value="emt">EMT</option>
+                            <option value="manager">Manager</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="empPosition">Position Level *</label>
+                        <select id="empPosition" required>
+                            <option value="">Select Level</option>
+                            <option value="Junior">Junior</option>
+                            <option value="Mid-Level">Mid-Level</option>
+                            <option value="Senior">Senior</option>
+                            <option value="Lead">Lead</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 1rem;">
+                    Save Employee
+                </button>
+            </form>
         </div>
     </div>
 
     <script>
-        function viewMember(memberId) {
-            alert(`Viewing details for team member #${memberId}`);
-        }
+        let calls = [];
+        let treatments = [];
+        let employees = [];
+        let currentTab = 'overview';
+        let editingEmployeeId = null;
         
-        function generateReport() {
-            if (confirm('Generate system performance report?')) {
-                alert('Report generation started. You will be notified when ready.');
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadAllData();
+            setupFilters();
+            initializeDateFilters();
+            updateOverview();
+        });
+        
+        // Load all data
+        async function loadAllData() {
+            try {
+                // Load calls
+                const callsResult = await window.storage.get('emergency-calls');
+                calls = callsResult && callsResult.value ? JSON.parse(callsResult.value) : [];
+                
+                // Load treatments
+                const treatmentsResult = await window.storage.get('treatment-records');
+                if (treatmentsResult && treatmentsResult.value) {
+                    treatments = JSON.parse(treatmentsResult.value);
+                } else {
+                    treatments = generateSampleTreatments();
+                    await window.storage.set('treatment-records', JSON.stringify(treatments));
+                }
+                
+                // Load employees
+                const employeesResult = await window.storage.get('employees');
+                if (employeesResult && employeesResult.value) {
+                    employees = JSON.parse(employeesResult.value);
+                } else {
+                    employees = generateSampleEmployees();
+                    await window.storage.set('employees', JSON.stringify(employees));
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
             }
         }
         
-        function systemMaintenance() {
-            if (confirm('Schedule system maintenance? This will temporarily reduce system capacity.')) {
-                alert('Maintenance scheduled for tonight at 2 AM.');
-            }
-        }
-        
-        function addTeamMember() {
-            const name = prompt('Enter new team member name:');
-            const role = prompt('Enter role (Call Operator/EMT/Manager):');
-            if (name && role) {
-                alert(`New team member ${name} added as ${role}`);
-            }
-        }
-        
-        function emergencyProtocol() {
-            if (confirm('Activate emergency protocol? This will alert all team members.')) {
-                alert('Emergency protocol activated! All team members have been notified.');
-            }
-        }
-        
-        // Simulate real-time updates
-        function updateStats() {
-            // This would typically fetch from an API
-            const totalCalls = Math.floor(Math.random() * 10) + 40;
-            const resolvedCalls = Math.floor(totalCalls * 0.9);
-            const activeCalls = totalCalls - resolvedCalls;
-            const avgResponse = (Math.random() * 2 + 4).toFixed(1);
-            const availableUnits = Math.floor(Math.random() * 5) + 6;
+        // Generate sample treatments
+        function generateSampleTreatments() {
+            const protocols = ['Cardiac Arrest', 'Respiratory Distress', 'Trauma', 'Stroke'];
+            const compliance = ['Compliant', 'Needs Review', 'Non-Compliant'];
+            const treatments = [];
             
-            document.getElementById('totalCalls').textContent = totalCalls;
-            document.getElementById('resolvedCalls').textContent = resolvedCalls;
-            document.getElementById('activeCalls').textContent = activeCalls;
-            document.getElementById('avgResponse').textContent = avgResponse;
-            document.getElementById('availableUnits').textContent = availableUnits;
+            for (let i = 0; i < 15; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() - Math.floor(Math.random() * 30));
+                const comp = compliance[Math.floor(Math.random() * compliance.length)];
+                const score = comp === 'Compliant' ? Math.floor(Math.random() * 20) + 80 :
+                             comp === 'Needs Review' ? Math.floor(Math.random() * 20) + 60 :
+                             Math.floor(Math.random() * 30) + 30;
+                
+                treatments.push({
+                    id: 'TRT' + (Date.now() + i),
+                    patientName: 'Patient ' + (i + 1),
+                    protocol: protocols[Math.floor(Math.random() * protocols.length)],
+                    emtName: 'EMT ' + (Math.floor(Math.random() * 5) + 1),
+                    treatmentTime: date.toISOString(),
+                    compliance: comp,
+                    score: score,
+                    notes: 'Treatment completed as per protocol'
+                });
+            }
+            return treatments;
         }
         
-        // Update stats every 30 seconds
-        setInterval(updateStats, 30000);
+        // Generate sample employees
+        function generateSampleEmployees() {
+            return [
+                {
+                    id: 'EMP001',
+                    firstName: 'John',
+                    lastName: 'Smith',
+                    email: 'john.smith@eris.com',
+                    phone: '555-0101',
+                    role: 'operator',
+                    position: 'Senior',
+                    hireDate: '2020-01-15'
+                },
+                {
+                    id: 'EMP002',
+                    firstName: 'Sarah',
+                    lastName: 'Johnson',
+                    email: 'sarah.johnson@eris.com',
+                    phone: '555-0102',
+                    role: 'emt',
+                    position: 'Lead',
+                    hireDate: '2019-06-20'
+                },
+                {
+                    id: 'EMP003',
+                    firstName: 'Mike',
+                    lastName: 'Davis',
+                    email: 'mike.davis@eris.com',
+                    phone: '555-0103',
+                    role: 'emt',
+                    position: 'Mid-Level',
+                    hireDate: '2021-03-10'
+                },
+                {
+                    id: 'EMP004',
+                    firstName: 'Lisa',
+                    lastName: 'Chen',
+                    email: 'lisa.chen@eris.com',
+                    phone: '555-0104',
+                    role: 'operator',
+                    position: 'Junior',
+                    hireDate: '2022-09-01'
+                }
+            ];
+        }
         
-        // Initial stats update
-        updateStats();
+        // Initialize date filters
+        function initializeDateFilters() {
+            const today = new Date();
+            const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+            
+            document.getElementById('dateTo').value = today.toISOString().split('T')[0];
+            document.getElementById('dateFrom').value = thirtyDaysAgo.toISOString().split('T')[0];
+            document.getElementById('treatmentDateTo').value = today.toISOString().split('T')[0];
+            document.getElementById('treatmentDateFrom').value = thirtyDaysAgo.toISOString().split('T')[0];
+        }
+        
+        // Setup filter listeners
+        function setupFilters() {
+            ['dateFrom', 'dateTo', 'statusFilter', 'priorityFilter'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', renderDispatchHistory);
+                }
+            });
+            
+            ['treatmentDateFrom', 'treatmentDateTo', 'complianceFilter', 'protocolFilter'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', renderTreatmentRecords);
+                }
+            });
+            
+            // Employee form submission
+            document.getElementById('employeeForm').addEventListener('submit', handleEmployeeSubmit);
+        }
+        
+        // Switch tabs
+        function switchTab(tabName) {
+            currentTab = tabName;
+            
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            if (tabName === 'dispatch') {
+                renderDispatchHistory();
+            } else if (tabName === 'treatment') {
+                renderTreatmentRecords();
+            } else if (tabName === 'employees') {
+                renderEmployeeList();
+            }
+        }
+        
+        // Update overview statistics
+        function updateOverview() {
+            const today = new Date().toDateString();
+            const todayCalls = calls.filter(c => new Date(c.createdAt).toDateString() === today);
+            
+            document.getElementById('totalCalls').textContent = todayCalls.length;
+            document.getElementById('activeCalls').textContent = calls.filter(c => c.status === 'Active').length;
+            document.getElementById('resolvedCalls').textContent = calls.filter(c => c.status === 'Completed').length;
+            document.getElementById('avgResponse').textContent = '5.2';
+        }
+        
+        // Render dispatch history
+        function renderDispatchHistory() {
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            const status = document.getElementById('statusFilter').value;
+            const priority = document.getElementById('priorityFilter').value;
+            
+            let filtered = calls.filter(call => {
+                const callDate = new Date(call.createdAt);
+                if (dateFrom && callDate < new Date(dateFrom)) return false;
+                if (dateTo && callDate > new Date(dateTo + 'T23:59:59')) return false;
+                if (status && call.status !== status) return false;
+                if (priority && call.priority !== priority) return false;
+                return true;
+            });
+            
+            const tbody = document.getElementById('dispatchTableBody');
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No dispatch records found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = filtered.map(call => `
+                <tr>
+                    <td><strong>${call.callId}</strong></td>
+                    <td>${call.firstName} ${call.lastName}</td>
+                    <td>${call.address}, ${call.city}</td>
+                    <td>${call.assignedEMTName || 'Not Assigned'}</td>
+                    <td>${formatDateTime(call.callTime)}</td>
+                    <td><span class="priority-${call.priority.toLowerCase()}">${call.priority}</span></td>
+                    <td><span class="status-badge status-${(call.status || 'Active').toLowerCase().replace(' ', '-')}">${call.status || 'Active'}</span></td>
+                    <td><button class="btn btn-primary" onclick='viewDispatchDetail(${JSON.stringify(call).replace(/'/g, "&apos;")})'>View</button></td>
+                </tr>
+            `).join('');
+        }
+        
+        // View dispatch detail
+        function viewDispatchDetail(dispatch) {
+            document.getElementById('modalTitle').textContent = `Dispatch: ${dispatch.callId}`;
+            document.getElementById('modalBody').innerHTML = `
+                <div class="detail-item">
+                    <div class="detail-label">Patient Name</div>
+                    <div class="detail-value">${dispatch.firstName} ${dispatch.lastName}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Phone Number</div>
+                    <div class="detail-value">${dispatch.phoneNumber}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Location</div>
+                    <div class="detail-value">${dispatch.address}, ${dispatch.city}, ${dispatch.state}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">EMT Assigned</div>
+                    <div class="detail-value">${dispatch.assignedEMTName || 'Not Assigned'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Priority</div>
+                    <div class="detail-value"><span class="priority-${dispatch.priority.toLowerCase()}">${dispatch.priority}</span></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Call Time</div>
+                    <div class="detail-value">${formatDateTime(dispatch.callTime)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Incident Description</div>
+                    <div class="detail-value">${dispatch.incidentDescription}</div>
+                </div>
+            `;
+            document.getElementById('detailModal').classList.add('show');
+        }
+        
+        // Render treatment records
+        function renderTreatmentRecords() {
+            const dateFrom = document.getElementById('treatmentDateFrom').value;
+            const dateTo = document.getElementById('treatmentDateTo').value;
+            const compliance = document.getElementById('complianceFilter').value;
+            const protocol = document.getElementById('protocolFilter').value;
+            
+            let filtered = treatments.filter(record => {
+                const recordDate = new Date(record.treatmentTime);
+                if (dateFrom && recordDate < new Date(dateFrom)) return false;
+                if (dateTo && recordDate > new Date(dateTo + 'T23:59:59')) return false;
+                if (compliance && record.compliance !== compliance) return false;
+                if (protocol && record.protocol !== protocol) return false;
+                return true;
+            });
+            
+            const tbody = document.getElementById('treatmentTableBody');
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No treatment records found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = filtered.map(record => {
+                const statusClass = record.compliance.toLowerCase().replace(' ', '-');
+                const scoreClass = record.score >= 80 ? 'response-good' : 
+                                  record.score >= 60 ? 'response-fair' : 'response-poor';
+                                  
+                return `
+                    <tr>
+                        <td><strong>${record.id}</strong></td>
+                        <td>${record.patientName}</td>
+                        <td>${record.protocol}</td>
+                        <td>${record.emtName}</td>
+                        <td>${formatDateTime(record.treatmentTime)}</td>
+                        <td><span class="status-badge status-${statusClass}">${record.compliance}</span></td>
+                        <td class="${scoreClass}">${record.score}%</td>
+                        <td><button class="btn btn-primary" onclick='viewTreatmentDetail(${JSON.stringify(record).replace(/'/g, "&apos;")})'>Review</button></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // View treatment detail
+        function viewTreatmentDetail(treatment) {
+            document.getElementById('modalTitle').textContent = `Treatment: ${treatment.id}`;
+            document.getElementById('modalBody').innerHTML = `
+                <div class="detail-item">
+                    <div class="detail-label">Patient</div>
+                    <div class="detail-value">${treatment.patientName}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Protocol</div>
+                    <div class="detail-value">${treatment.protocol}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">EMT</div>
+                    <div class="detail-value">${treatment.emtName}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Treatment Time</div>
+                    <div class="detail-value">${formatDateTime(treatment.treatmentTime)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Compliance Status</div>
+                    <div class="detail-value"><span class="status-badge status-${treatment.compliance.toLowerCase().replace(' ', '-')}">${treatment.compliance}</span></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Compliance Score</div>
+                    <div class="detail-value">${treatment.score}%</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Notes</div>
+                    <div class="detail-value">${treatment.notes}</div>
+                </div>
+            `;
+            document.getElementById('detailModal').classList.add('show');
+        }
+        
+        // Render employee list
+        function renderEmployeeList() {
+            const listDiv = document.getElementById('employeeList');
+            
+            if (employees.length === 0) {
+                listDiv.innerHTML = '<div class="empty-state">No employees found</div>';
+                return;
+            }
+            
+            listDiv.innerHTML = employees.map(emp => `
+                <div class="employee-card">
+                    <div class="employee-info">
+                        <h3>${emp.firstName} ${emp.lastName}</h3>
+                        <div class="employee-details">
+                            <div><strong>Role:</strong> ${emp.role.charAt(0).toUpperCase() + emp.role.slice(1)}</div>
+                            <div><strong>Position:</strong> ${emp.position}</div>
+                            <div><strong>Email:</strong> ${emp.email}</div>
+                            <div><strong>Phone:</strong> ${emp.phone}</div>
+                            <div><strong>Hire Date:</strong> ${emp.hireDate}</div>
+                        </div>
+                    </div>
+                    <div class="employee-actions">
+                        <button class="btn btn-primary" onclick="editEmployee('${emp.id}')">Edit</button>
+                        <button class="btn btn-primary" onclick="deleteEmployee('${emp.id}')" style="background: #ef4444;">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Show add employee modal
+        function showAddEmployeeModal() {
+            editingEmployeeId = null;
+            document.getElementById('employeeModalTitle').textContent = 'Add New Employee';
+            document.getElementById('employeeForm').reset();
+            document.getElementById('employeeModal').classList.add('show');
+        }
+        
+        // Edit employee
+        function editEmployee(employeeId) {
+            const employee = employees.find(e => e.id === employeeId);
+            if (!employee) return;
+            
+            editingEmployeeId = employeeId;
+            document.getElementById('employeeModalTitle').textContent = 'Edit Employee';
+            
+            document.getElementById('empFirstName').value = employee.firstName;
+            document.getElementById('empLastName').value = employee.lastName;
+            document.getElementById('empEmail').value = employee.email;
+            document.getElementById('empPhone').value = employee.phone;
+            document.getElementById('empRole').value = employee.role;
+            document.getElementById('empPosition').value = employee.position;
+            
+            document.getElementById('employeeModal').classList.add('show');
+        }
+        
+        // Delete employee
+        async function deleteEmployee(employeeId) {
+            if (!confirm('Are you sure you want to delete this employee?')) return;
+            
+            employees = employees.filter(e => e.id !== employeeId);
+            await window.storage.set('employees', JSON.stringify(employees));
+            renderEmployeeList();
+            alert('Employee deleted successfully');
+        }
+        
+        // Handle employee form submission
+        async function handleEmployeeSubmit(e) {
+            e.preventDefault();
+            
+            const employeeData = {
+                firstName: document.getElementById('empFirstName').value.trim(),
+                lastName: document.getElementById('empLastName').value.trim(),
+                email: document.getElementById('empEmail').value.trim(),
+                phone: document.getElementById('empPhone').value.trim(),
+                role: document.getElementById('empRole').value,
+                position: document.getElementById('empPosition').value
+            };
+            
+            if (editingEmployeeId) {
+                // Update existing employee
+                const index = employees.findIndex(e => e.id === editingEmployeeId);
+                if (index !== -1) {
+                    employees[index] = { ...employees[index], ...employeeData };
+                }
+            } else {
+                // Add new employee
+                const newEmployee = {
+                    id: 'EMP' + Date.now(),
+                    ...employeeData,
+                    hireDate: new Date().toISOString().split('T')[0]
+                };
+                employees.push(newEmployee);
+            }
+            
+            await window.storage.set('employees', JSON.stringify(employees));
+            closeEmployeeModal();
+            renderEmployeeList();
+            alert('Employee saved successfully!');
+        }
+        
+        // Export dispatch history
+        function exportDispatchHistory() {
+            const csv = [
+                ['Call ID', 'Patient', 'Phone', 'Location', 'EMT Assigned', 'Priority', 'Call Time', 'Status'],
+                ...calls.map(c => [
+                    c.callId,
+                    `${c.firstName} ${c.lastName}`,
+                    c.phoneNumber,
+                    `${c.address}, ${c.city}, ${c.state}`,
+                    c.assignedEMTName || 'Not Assigned',
+                    c.priority,
+                    formatDateTime(c.callTime),
+                    c.status || 'Active'
+                ])
+            ].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+            
+            downloadCSV(csv, 'dispatch_history.csv');
+        }
+        
+        // Export treatment records
+        function exportTreatmentRecords() {
+            const csv = [
+                ['Treatment ID', 'Patient', 'Protocol', 'EMT', 'Date/Time', 'Compliance', 'Score', 'Notes'],
+                ...treatments.map(t => [
+                    t.id,
+                    t.patientName,
+                    t.protocol,
+                    t.emtName,
+                    formatDateTime(t.treatmentTime),
+                    t.compliance,
+                    `${t.score}%`,
+                    t.notes
+                ])
+            ].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+            
+            downloadCSV(csv, 'treatment_records.csv');
+        }
+        
+        // Download CSV helper
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        // Close modals
+        function closeModal() {
+            document.getElementById('detailModal').classList.remove('show');
+        }
+        
+        function closeEmployeeModal() {
+            document.getElementById('employeeModal').classList.remove('show');
+        }
+        
+        // Format date time
+        function formatDateTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
     </script>
 </body>
 </html>

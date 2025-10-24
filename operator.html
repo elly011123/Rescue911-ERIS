@@ -6,6 +6,7 @@
     <title>Call Operator Dashboard - ERIS</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* Keep all existing styles from original operator.html */
         .dashboard-container {
             min-height: 100vh;
             padding: 2rem;
@@ -31,7 +32,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
         
@@ -53,36 +54,185 @@
             gap: 0.5rem;
         }
         
-        .call-list {
-            max-height: 400px;
-            overflow-y: auto;
+        /* Patient Search Styles */
+        .patient-search-section {
+            position: relative;
+            margin-bottom: 1.5rem;
         }
         
-        .call-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+        .search-input {
+            width: 100%;
             padding: 1rem;
-            margin-bottom: 1rem;
-            border-left: 4px solid #3b82f6;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
         }
         
-        .call-item.emergency {
-            border-left-color: #dc2626;
-            background: rgba(220, 38, 38, 0.1);
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
         }
         
-        .call-time {
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(30, 60, 114, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            margin-top: 0.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        
+        .search-result-item {
+            padding: 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.2s;
+        }
+        
+        .search-result-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .patient-name-result {
+            color: #e2e8f0;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .patient-details-result {
             color: #94a3b8;
             font-size: 0.9rem;
         }
         
-        .call-location {
-            color: #e2e8f0;
-            font-weight: 500;
-            margin: 0.5rem 0;
+        .call-history-badge {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
         }
         
-        .call-status {
+        /* Selected Patient Display */
+        .selected-patient-panel {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .selected-patient-name {
+            color: #10b981;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .selected-patient-info {
+            color: #e2e8f0;
+            font-size: 0.95rem;
+        }
+        
+        /* Patient Form Styles */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            color: #e2e8f0;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 0.75rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* EMT List Styles */
+        .emt-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .emt-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .emt-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .emt-item.available {
+            border-left: 4px solid #10b981;
+        }
+        
+        .emt-item.busy {
+            border-left: 4px solid #ef4444;
+            opacity: 0.6;
+        }
+        
+        .emt-info {
+            flex: 1;
+        }
+        
+        .emt-name {
+            color: #e2e8f0;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .emt-unit {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        .emt-status {
             display: inline-block;
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
@@ -91,34 +241,23 @@
             text-transform: uppercase;
         }
         
-        .status-pending {
-            background: rgba(251, 191, 36, 0.2);
-            color: #fbbf24;
-        }
-        
-        .status-active {
+        .emt-status.available {
             background: rgba(16, 185, 129, 0.2);
             color: #10b981;
         }
         
-        .status-completed {
-            background: rgba(107, 114, 128, 0.2);
-            color: #6b7280;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
+        .emt-status.busy {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
         }
         
         .btn {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.9rem;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
         
@@ -142,13 +281,98 @@
             transform: translateY(-1px);
         }
         
-        .btn-danger {
-            background: #ef4444;
-            color: white;
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .btn-danger:hover {
-            background: #dc2626;
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Call History */
+        .call-history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .call-history-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .call-time {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .call-description {
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .call-location {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+        
+        /* Success Notification */
+        .success-notification {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .success-notification.error {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
             transform: translateY(-1px);
         }
         
@@ -177,258 +401,12 @@
             font-size: 0.9rem;
             margin-top: 0.5rem;
         }
-        
-        .back-button {
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 0.8rem 1.5rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        .back-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
-        }
-        
-        /* Incoming Call Banner */
-        .incoming-call-banner {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            border: 2px solid rgba(220, 38, 38, 0.5);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            animation: slideDown 0.3s ease-out;
-        }
-        
-        .banner-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-        }
-        
-        .banner-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Record Form */
-        .record-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .form-group label {
-            color: #e2e8f0;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            padding: 0.75rem;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-        }
-        
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
-        /* Patient Records */
-        .patient-group {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid #3b82f6;
-        }
-        
-        .patient-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .patient-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #e2e8f0;
-        }
-        
-        .record-count {
-            background: rgba(59, 130, 246, 0.2);
-            color: #3b82f6;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .record-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-            border-left: 3px solid #10b981;
-            position: relative;
-        }
-        
-        .record-content {
-            padding-right: 3rem;
-        }
-        
-        .record-time {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .record-address {
-            color: #e2e8f0;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-        
-        .record-incident {
-            color: #cbd5e1;
-            font-size: 0.95rem;
-        }
-        
-        .record-actions {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .btn-delete {
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 0.4rem 0.8rem;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-delete:hover {
-            background: #dc2626;
-            transform: translateY(-1px);
-        }
-        
-        .no-records {
-            text-align: center;
-            color: #94a3b8;
-            font-style: italic;
-            padding: 2rem;
-        }
-        
-        /* Success Toast */
-        .success-toast {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
-            z-index: 1000;
-            animation: slideInRight 0.3s ease-out;
-        }
-        
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .banner-content {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .banner-buttons {
-                justify-content: center;
-            }
-        }
     </style>
 </head>
 <body>
     <a href="index.html" class="back-button">← Back to Home</a>
     
     <div class="dashboard-container">
-        <!-- Incoming Call Notification Banner -->
-        <div id="incomingCallBanner" class="incoming-call-banner" style="display: none;" role="alert">
-            <div class="banner-content">
-                <span id="bannerMessage">Incoming Call from </span>
-                <div class="banner-buttons">
-                    <button class="btn btn-primary" onclick="fillFormFromIncomingCall()">Fill Form</button>
-                    <button class="btn btn-danger" onclick="dismissBanner()">Dismiss</button>
-                </div>
-            </div>
-        </div>
-        
         <div class="dashboard-header">
             <h1 class="dashboard-title">Call Operator Dashboard</h1>
             <p class="dashboard-subtitle">Manage emergency calls and dispatch resources</p>
@@ -436,453 +414,413 @@
         
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number" id="totalCalls">12</div>
+                <div class="stat-number" id="totalCalls">0</div>
                 <div class="stat-label">Total Calls Today</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="activeCalls">3</div>
+                <div class="stat-number" id="activeCalls">0</div>
                 <div class="stat-label">Active Calls</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="avgResponse">4.2</div>
+                <div class="stat-number" id="avgResponse">0</div>
                 <div class="stat-label">Avg Response (min)</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="resolvedCalls">9</div>
-                <div class="stat-label">Resolved</div>
+                <div class="stat-number" id="availableEMTs">0</div>
+                <div class="stat-label">Available EMTs</div>
             </div>
         </div>
         
         <div class="dashboard-grid">
+            <!-- Emergency Call Entry Form -->
             <div class="dashboard-card">
-                <h2 class="card-title">📞 Active Calls</h2>
-                <div class="call-list" id="activeCallsList">
-                    <div class="call-item emergency">
-                        <div class="call-time">2 minutes ago</div>
-                        <div class="call-location">123 Main St, Downtown</div>
-                        <span class="call-status status-active">In Progress</span>
-                        <div class="action-buttons">
-                            <button class="btn btn-primary" onclick="viewCall(1)">View Details</button>
-                            <button class="btn btn-success" onclick="dispatchEMT(1)">Dispatch EMT</button>
-                        </div>
-                    </div>
-                    <div class="call-item">
-                        <div class="call-time">5 minutes ago</div>
-                        <div class="call-location">456 Oak Ave, Suburbs</div>
-                        <span class="call-status status-pending">Pending</span>
-                        <div class="action-buttons">
-                            <button class="btn btn-primary" onclick="viewCall(2)">View Details</button>
-                            <button class="btn btn-success" onclick="dispatchEMT(2)">Dispatch EMT</button>
-                        </div>
-                    </div>
+                <h2 class="card-title">📞 New Emergency Call</h2>
+                
+                <!-- Patient Search -->
+                <div class="patient-search-section">
+                    <label style="color: #e2e8f0; font-weight: 500; margin-bottom: 0.5rem; display: block;">
+                        Search Existing Patient
+                    </label>
+                    <input 
+                        type="text" 
+                        id="patientSearch" 
+                        class="search-input" 
+                        placeholder="Search by name, phone, or patient ID..."
+                        autocomplete="off"
+                    >
+                    <div id="searchResults" class="search-results" style="display: none;"></div>
                 </div>
+                
+                <!-- Selected Patient Display -->
+                <div id="selectedPatientPanel" class="selected-patient-panel" style="display: none;">
+                    <div class="selected-patient-name" id="selectedPatientName"></div>
+                    <div class="selected-patient-info" id="selectedPatientDetails"></div>
+                    <button class="btn btn-primary" style="margin-top: 0.5rem;" onclick="clearPatientSelection()">
+                        Clear Selection
+                    </button>
+                </div>
+                
+                <!-- Patient Information Form -->
+                <form id="emergencyCallForm">
+                    <h3 style="color: #93c5fd; margin-bottom: 1rem;">Patient Information</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number *</label>
+                            <input type="tel" id="phoneNumber" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateOfBirth">Date of Birth</label>
+                            <input type="date" id="dateOfBirth">
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: #93c5fd; margin: 1.5rem 0 1rem;">Incident Details</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="callTime">Call Time *</label>
+                            <input type="datetime-local" id="callTime" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="priority">Priority *</label>
+                            <select id="priority" required>
+                                <option value="">Select Priority</option>
+                                <option value="Critical">Critical</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="address">Address *</label>
+                            <input type="text" id="address" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City *</label>
+                            <input type="text" id="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State *</label>
+                            <input type="text" id="state" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="incidentDescription">Incident Description *</label>
+                        <textarea id="incidentDescription" rows="4" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success btn-submit">
+                        Submit Emergency Call
+                    </button>
+                </form>
             </div>
             
+            <!-- Available EMTs -->
             <div class="dashboard-card">
-                <h2 class="card-title">🚑 Available Resources</h2>
-                <div id="resourcesList">
-                    <div class="call-item">
-                        <div class="call-location">EMT Unit 1 - Station A</div>
-                        <span class="call-status status-active">Available</span>
-                        <div class="action-buttons">
-                            <button class="btn btn-primary" onclick="assignUnit(1)">Assign</button>
-                        </div>
-                    </div>
-                    <div class="call-item">
-                        <div class="call-location">EMT Unit 2 - Station B</div>
-                        <span class="call-status status-pending">On Call</span>
-                    </div>
-                    <div class="call-item">
-                        <div class="call-location">EMT Unit 3 - Station C</div>
-                        <span class="call-status status-active">Available</span>
-                        <div class="action-buttons">
-                            <button class="btn btn-primary" onclick="assignUnit(3)">Assign</button>
-                        </div>
-                    </div>
-                </div>
+                <h2 class="card-title">🚑 Available EMT Units</h2>
+                <div id="emtList" class="emt-list"></div>
             </div>
             
+            <!-- Patient Call History -->
             <div class="dashboard-card">
-                <h2 class="card-title">📊 Recent Activity</h2>
-                <div class="call-list">
-                    <div class="call-item">
-                        <div class="call-time">10 minutes ago</div>
-                        <div class="call-location">789 Pine St - Medical Emergency</div>
-                        <span class="call-status status-completed">Resolved</span>
-                    </div>
-                    <div class="call-item">
-                        <div class="call-time">15 minutes ago</div>
-                        <div class="call-location">321 Elm St - Traffic Accident</div>
-                        <span class="call-status status-completed">Resolved</span>
-                    </div>
-                    <div class="call-item">
-                        <div class="call-time">20 minutes ago</div>
-                        <div class="call-location">654 Maple Dr - Fire Emergency</div>
-                        <span class="call-status status-completed">Resolved</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- New Record Form Panel -->
-        <div class="dashboard-card">
-            <h2 class="card-title">📝 New Record</h2>
-            <form id="newRecordForm" class="record-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="firstName">First Name *</label>
-                        <input type="text" id="firstName" name="firstName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name *</label>
-                        <input type="text" id="lastName" name="lastName" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="recordTime">Record Time *</label>
-                        <input type="datetime-local" id="recordTime" name="recordTime" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="street">Street *</label>
-                        <input type="text" id="street" name="street" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="apt">Apt/Suite</label>
-                        <input type="text" id="apt" name="apt">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="state">State *</label>
-                        <input type="text" id="state" name="state" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="incidentDescription">Incident Description *</label>
-                    <textarea id="incidentDescription" name="incidentDescription" rows="3" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-success">Save Record</button>
-            </form>
-        </div>
-        
-        <!-- Patient Records Panel -->
-        <div class="dashboard-card">
-            <h2 class="card-title">📋 Patient Records</h2>
-            <div id="patientRecordsContainer">
-                <div class="no-records" id="noRecordsMessage">
-                    No records found. Create a new record above.
+                <h2 class="card-title">📋 Patient Call History</h2>
+                <div id="patientCallHistory" class="call-history-list">
+                    <p style="color: #94a3b8; text-align: center; padding: 2rem;">
+                        Select a patient to view call history
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Global variables
-        let incomingCallData = null;
+        let patients = [];
+        let calls = [];
+        let emts = [];
+        let selectedPatient = null;
         
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set default record time to now
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadData();
+            setupEventListeners();
+            updateStats();
+            renderEMTList();
+            
+            // Set default call time
             const now = new Date();
             const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-            document.getElementById('recordTime').value = localDateTime;
-            
-            // Check for incoming call on page load
-            checkForIncomingCall();
-            
-            // Render existing records
-            renderGroupedRecords();
-            
-            // Set up form submission
-            document.getElementById('newRecordForm').addEventListener('submit', handleFormSubmit);
-            
-            // Set up storage event listener for real-time updates
-            window.addEventListener('storage', handleStorageEvent);
+            document.getElementById('callTime').value = localDateTime;
         });
         
-        // Check for incoming call in localStorage
-        function checkForIncomingCall() {
-            const incomingCall = localStorage.getItem('incomingCall');
-            if (incomingCall) {
-                incomingCallData = JSON.parse(incomingCall);
-                showIncomingCallBanner();
-            }
-        }
-        
-        // Handle storage events (real-time updates)
-        function handleStorageEvent(event) {
-            if (event.key === 'incomingCall') {
-                if (event.newValue) {
-                    incomingCallData = JSON.parse(event.newValue);
-                    showIncomingCallBanner();
+        // Load data from storage
+        async function loadData() {
+            try {
+                // Load patients
+                const patientsResult = await window.storage.get('patients');
+                patients = patientsResult && patientsResult.value ? JSON.parse(patientsResult.value) : [];
+                
+                // Load calls
+                const callsResult = await window.storage.get('emergency-calls');
+                calls = callsResult && callsResult.value ? JSON.parse(callsResult.value) : [];
+                
+                // Load EMTs
+                const emtsResult = await window.storage.get('emt-units');
+                if (emtsResult && emtsResult.value) {
+                    emts = JSON.parse(emtsResult.value);
                 } else {
-                    incomingCallData = null;
-                    hideIncomingCallBanner();
+                    // Initialize with sample EMTs
+                    emts = [
+                        { id: 'EMT-001', name: 'John Smith', unit: 'Unit A', status: 'available' },
+                        { id: 'EMT-002', name: 'Sarah Johnson', unit: 'Unit B', status: 'available' },
+                        { id: 'EMT-003', name: 'Mike Davis', unit: 'Unit C', status: 'busy' },
+                        { id: 'EMT-004', name: 'Lisa Chen', unit: 'Unit D', status: 'available' },
+                        { id: 'EMT-005', name: 'Tom Wilson', unit: 'Unit E', status: 'available' }
+                    ];
+                    await window.storage.set('emt-units', JSON.stringify(emts));
                 }
+            } catch (error) {
+                console.error('Error loading data:', error);
             }
         }
         
-        // Show incoming call banner
-        function showIncomingCallBanner() {
-            if (incomingCallData) {
-                const banner = document.getElementById('incomingCallBanner');
-                const message = document.getElementById('bannerMessage');
-                message.textContent = `Incoming Call from ${incomingCallData.patientName}`;
-                banner.style.display = 'block';
+        // Setup event listeners
+        function setupEventListeners() {
+            // Patient search
+            document.getElementById('patientSearch').addEventListener('input', handlePatientSearch);
+            
+            // Form submission
+            document.getElementById('emergencyCallForm').addEventListener('submit', handleFormSubmit);
+            
+            // Close search results when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.patient-search-section')) {
+                    document.getElementById('searchResults').style.display = 'none';
+                }
+            });
+        }
+        
+        // Handle patient search
+        function handlePatientSearch(e) {
+            const query = e.target.value.trim().toLowerCase();
+            const resultsDiv = document.getElementById('searchResults');
+            
+            if (!query) {
+                resultsDiv.style.display = 'none';
+                return;
             }
-        }
-        
-        // Hide incoming call banner
-        function hideIncomingCallBanner() {
-            const banner = document.getElementById('incomingCallBanner');
-            banner.style.display = 'none';
-        }
-        
-        // Fill form from incoming call data
-        function fillFormFromIncomingCall() {
-            if (incomingCallData) {
-                // Split patient name into first and last name
-                const nameParts = incomingCallData.patientName.split(' ');
-                document.getElementById('firstName').value = nameParts[0] || '';
-                document.getElementById('lastName').value = nameParts.slice(1).join(' ') || '';
-                
-                // Split address into components (basic parsing)
-                const addressParts = incomingCallData.address.split(',');
-                document.getElementById('street').value = addressParts[0]?.trim() || incomingCallData.address;
-                document.getElementById('state').value = addressParts[addressParts.length - 1]?.trim() || '';
-                
-                document.getElementById('incidentDescription').value = incomingCallData.description;
-                
-                // Set record time to now
-                const now = new Date();
-                const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-                document.getElementById('recordTime').value = localDateTime;
-                
-                // Clear incoming call data and hide banner
-                localStorage.removeItem('incomingCall');
-                incomingCallData = null;
-                hideIncomingCallBanner();
-                
-                // Focus on the form
-                document.getElementById('firstName').focus();
+            
+            // Filter patients
+            const filtered = patients.filter(p => 
+                p.firstName.toLowerCase().includes(query) ||
+                p.lastName.toLowerCase().includes(query) ||
+                p.phoneNumber.includes(query) ||
+                (p.patientId && p.patientId.toLowerCase().includes(query))
+            );
+            
+            if (filtered.length === 0) {
+                resultsDiv.innerHTML = '<div style="padding: 1rem; color: #94a3b8; text-align: center;">No patients found</div>';
+                resultsDiv.style.display = 'block';
+                return;
             }
+            
+            // Display results
+            resultsDiv.innerHTML = filtered.map(p => {
+                const callCount = calls.filter(c => c.patientId === p.patientId).length;
+                return `
+                    <div class="search-result-item" onclick='selectPatient(${JSON.stringify(p)})'>
+                        <div class="patient-name-result">${p.firstName} ${p.lastName}</div>
+                        <div class="patient-details-result">
+                            Phone: ${p.phoneNumber} | DOB: ${p.dateOfBirth || 'N/A'}
+                            <span class="call-history-badge">${callCount} previous call(s)</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            resultsDiv.style.display = 'block';
         }
         
-        // Dismiss banner
-        function dismissBanner() {
-            localStorage.removeItem('incomingCall');
-            incomingCallData = null;
-            hideIncomingCallBanner();
+        // Select patient from search
+        function selectPatient(patient) {
+            selectedPatient = patient;
+            
+            // Hide search results
+            document.getElementById('searchResults').style.display = 'none';
+            document.getElementById('patientSearch').value = '';
+            
+            // Show selected patient panel
+            document.getElementById('selectedPatientPanel').style.display = 'block';
+            document.getElementById('selectedPatientName').textContent = 
+                `${patient.firstName} ${patient.lastName}`;
+            document.getElementById('selectedPatientDetails').textContent = 
+                `Phone: ${patient.phoneNumber} | DOB: ${patient.dateOfBirth || 'N/A'} | ID: ${patient.patientId}`;
+            
+            // Fill form with patient data
+            document.getElementById('firstName').value = patient.firstName;
+            document.getElementById('lastName').value = patient.lastName;
+            document.getElementById('phoneNumber').value = patient.phoneNumber;
+            document.getElementById('dateOfBirth').value = patient.dateOfBirth || '';
+            
+            // Load patient call history
+            loadPatientCallHistory(patient.patientId);
+        }
+        
+        // Clear patient selection
+        function clearPatientSelection() {
+            selectedPatient = null;
+            document.getElementById('selectedPatientPanel').style.display = 'none';
+            document.getElementById('firstName').value = '';
+            document.getElementById('lastName').value = '';
+            document.getElementById('phoneNumber').value = '';
+            document.getElementById('dateOfBirth').value = '';
+            document.getElementById('patientCallHistory').innerHTML = 
+                '<p style="color: #94a3b8; text-align: center; padding: 2rem;">Select a patient to view call history</p>';
+        }
+        
+        // Load patient call history
+        function loadPatientCallHistory(patientId) {
+            const patientCalls = calls.filter(c => c.patientId === patientId);
+            const historyDiv = document.getElementById('patientCallHistory');
+            
+            if (patientCalls.length === 0) {
+                historyDiv.innerHTML = '<p style="color: #94a3b8; text-align: center; padding: 2rem;">No previous calls for this patient</p>';
+                return;
+            }
+            
+            historyDiv.innerHTML = patientCalls.map(call => `
+                <div class="call-history-item">
+                    <div class="call-time">${formatDateTime(call.callTime)}</div>
+                    <div class="call-description"><strong>Priority:</strong> ${call.priority}</div>
+                    <div class="call-description">${call.incidentDescription}</div>
+                    <div class="call-location">📍 ${call.address}, ${call.city}, ${call.state}</div>
+                </div>
+            `).join('');
         }
         
         // Handle form submission
-        function handleFormSubmit(event) {
-            event.preventDefault();
+        async function handleFormSubmit(e) {
+            e.preventDefault();
             
-            const formData = new FormData(event.target);
-            const firstName = formData.get('firstName').trim();
-            const lastName = formData.get('lastName').trim();
-            const street = formData.get('street').trim();
-            const apt = formData.get('apt').trim();
-            const state = formData.get('state').trim();
-            const incident = formData.get('incidentDescription').trim();
-            const recordTimeISO = formData.get('recordTime');
-            
-            // Validate required fields
-            if (!firstName || !lastName || !street || !state || !incident) {
-                alert('Please fill in all required fields.');
-                return;
-            }
-            
-            const record = {
-                id: Date.now().toString(), // Unique ID for deletion
-                firstName: firstName,
-                lastName: lastName,
-                fullName: `${firstName} ${lastName}`,
-                street: street,
-                apt: apt,
-                state: state,
-                fullAddress: apt ? `${street}, ${apt}, ${state}` : `${street}, ${state}`,
-                incident: incident,
-                recordTimeISO: recordTimeISO
+            const formData = {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                phoneNumber: document.getElementById('phoneNumber').value.trim(),
+                dateOfBirth: document.getElementById('dateOfBirth').value,
+                callTime: document.getElementById('callTime').value,
+                priority: document.getElementById('priority').value,
+                address: document.getElementById('address').value.trim(),
+                city: document.getElementById('city').value.trim(),
+                state: document.getElementById('state').value.trim(),
+                incidentDescription: document.getElementById('incidentDescription').value.trim()
             };
             
-            // Save to localStorage
-            saveRecord(record);
-            
-            // Re-render records
-            renderGroupedRecords();
-            
-            // Show success toast
-            showToast('Record saved successfully.');
-            
-            // Clear form (keep patient name if it came from incoming call)
-            if (!incomingCallData) {
-                event.target.reset();
-                const now = new Date();
-                const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-                document.getElementById('recordTime').value = localDateTime;
+            // Generate or use existing patient ID
+            let patientId;
+            if (selectedPatient) {
+                patientId = selectedPatient.patientId;
             } else {
-                // Keep patient name, clear other fields
-                document.getElementById('street').value = '';
-                document.getElementById('apt').value = '';
-                document.getElementById('state').value = '';
-                document.getElementById('incidentDescription').value = '';
-                const now = new Date();
-                const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-                document.getElementById('recordTime').value = localDateTime;
+                // Create new patient
+                patientId = 'P' + Date.now();
+                const newPatient = {
+                    patientId: patientId,
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    phoneNumber: formData.phoneNumber,
+                    dateOfBirth: formData.dateOfBirth,
+                    createdAt: new Date().toISOString()
+                };
+                patients.push(newPatient);
+                await window.storage.set('patients', JSON.stringify(patients));
             }
-        }
-        
-        // Save record to localStorage
-        function saveRecord(record) {
-            let records = JSON.parse(localStorage.getItem('operatorRecords') || '[]');
-            records.push(record);
-            localStorage.setItem('operatorRecords', JSON.stringify(records));
-        }
-        
-        // Render grouped records
-        function renderGroupedRecords() {
-            const records = JSON.parse(localStorage.getItem('operatorRecords') || '[]');
-            const container = document.getElementById('patientRecordsContainer');
-            const noRecordsMessage = document.getElementById('noRecordsMessage');
             
-            if (records.length === 0) {
-                noRecordsMessage.style.display = 'block';
+            // Create call record
+            const newCall = {
+                callId: 'CALL' + Date.now(),
+                patientId: patientId,
+                ...formData,
+                status: 'Active',
+                operatorId: localStorage.getItem('username') || 'operator',
+                createdAt: new Date().toISOString()
+            };
+            
+            calls.push(newCall);
+            await window.storage.set('emergency-calls', JSON.stringify(calls));
+            
+            // Show success notification
+            showNotification('Emergency call submitted successfully!', 'success');
+            
+            // Reset form (except patient info if selected)
+            document.getElementById('address').value = '';
+            document.getElementById('city').value = '';
+            document.getElementById('state').value = '';
+            document.getElementById('incidentDescription').value = '';
+            document.getElementById('priority').value = '';
+            
+            const now = new Date();
+            const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+            document.getElementById('callTime').value = localDateTime;
+            
+            if (selectedPatient) {
+                loadPatientCallHistory(selectedPatient.patientId);
+            } else {
+                clearPatientSelection();
+            }
+            
+            updateStats();
+        }
+        
+        // Render EMT list
+        function renderEMTList() {
+            const emtListDiv = document.getElementById('emtList');
+            
+            emtListDiv.innerHTML = emts.map(emt => `
+                <div class="emt-item ${emt.status}">
+                    <div class="emt-info">
+                        <div class="emt-name">${emt.name}</div>
+                        <div class="emt-unit">${emt.unit} (${emt.id})</div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;">
+                        <span class="emt-status ${emt.status}">${emt.status}</span>
+                        ${emt.status === 'available' ? 
+                            `<button class="btn btn-primary" onclick="assignEMT('${emt.id}')">Assign</button>` : 
+                            '<button class="btn btn-primary" disabled>Busy</button>'
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Assign EMT to call
+        async function assignEMT(emtId) {
+            if (calls.length === 0) {
+                showNotification('No active calls to assign', 'error');
                 return;
             }
             
-            noRecordsMessage.style.display = 'none';
+            const emt = emts.find(e => e.id === emtId);
+            if (!emt) return;
             
-            // Group records by patient name (use fullName for grouping)
-            const groupedRecords = records.reduce((groups, record) => {
-                const name = record.fullName || record.patientName || `${record.firstName} ${record.lastName}`;
-                if (!groups[name]) {
-                    groups[name] = [];
-                }
-                groups[name].push(record);
-                return groups;
-            }, {});
-            
-            // Sort records within each group by time (newest first)
-            Object.keys(groupedRecords).forEach(name => {
-                groupedRecords[name].sort((a, b) => new Date(b.recordTimeISO) - new Date(a.recordTimeISO));
-            });
-            
-            // Render grouped records
-            let html = '';
-            Object.keys(groupedRecords).forEach(patientName => {
-                const patientRecords = groupedRecords[patientName];
-                html += `
-                    <div class="patient-group">
-                        <div class="patient-header">
-                            <div class="patient-name">${patientName}</div>
-                            <div class="record-count">${patientRecords.length} record${patientRecords.length !== 1 ? 's' : ''}</div>
-                        </div>
-                        ${patientRecords.map(record => `
-                            <div class="record-item">
-                                <div class="record-content">
-                                    <div class="record-time">${formatDateTime(record.recordTimeISO)}</div>
-                                    <div class="record-address">${record.fullAddress || record.address || `${record.street}${record.apt ? ', ' + record.apt : ''}, ${record.state}`}</div>
-                                    <div class="record-incident">${record.incident}</div>
-                                </div>
-                                <div class="record-actions">
-                                    <button class="btn-delete" onclick="deleteRecord('${record.id}')" title="Delete Record">🗑️</button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
-        
-        // Delete record function
-        function deleteRecord(recordId) {
-            if (confirm('Are you sure you want to delete this record?')) {
-                let records = JSON.parse(localStorage.getItem('operatorRecords') || '[]');
-                records = records.filter(record => record.id !== recordId);
-                localStorage.setItem('operatorRecords', JSON.stringify(records));
+            if (confirm(`Assign ${emt.name} (${emt.unit}) to the most recent call?`)) {
+                // Update EMT status
+                emt.status = 'busy';
+                await window.storage.set('emt-units', JSON.stringify(emts));
                 
-                // Re-render records
-                renderGroupedRecords();
-                
-                // Show success toast
-                showToast('Record deleted successfully.');
-            }
-        }
-        
-        // Format datetime for display
-        function formatDateTime(isoString) {
-            const date = new Date(isoString);
-            return date.toLocaleString();
-        }
-        
-        // Show success toast
-        function showToast(message) {
-            // Remove existing toast
-            const existingToast = document.querySelector('.success-toast');
-            if (existingToast) {
-                existingToast.remove();
-            }
-            
-            // Create new toast
-            const toast = document.createElement('div');
-            toast.className = 'success-toast';
-            toast.textContent = message;
-            toast.setAttribute('role', 'alert');
-            
-            document.body.appendChild(toast);
-            
-            // Auto-remove after 3 seconds
-            setTimeout(() => {
-                if (toast.parentNode) {
-                    toast.remove();
-                }
-            }, 3000);
-        }
-        
-        // Simulate real-time updates
-        function updateStats() {
-            // This would typically fetch from an API
-            const totalCalls = Math.floor(Math.random() * 5) + 10;
-            const activeCalls = Math.floor(Math.random() * 3) + 1;
-            const avgResponse = (Math.random() * 2 + 3).toFixed(1);
-            const resolvedCalls = totalCalls - activeCalls;
-            
-            document.getElementById('totalCalls').textContent = totalCalls;
-            document.getElementById('activeCalls').textContent = activeCalls;
-            document.getElementById('avgResponse').textContent = avgResponse;
-            document.getElementById('resolvedCalls').textContent = resolvedCalls;
-        }
-        
-        function viewCall(callId) {
-            alert(`Viewing details for call #${callId}`);
-        }
-        
-        function dispatchEMT(callId) {
-            if (confirm(`Dispatch EMT to call #${callId}?`)) {
-                alert(`EMT dispatched to call #${callId}`);
-                // Update UI to show EMT dispatched
-            }
-        }
-        
-        function assignUnit(unitId) {
-            if (confirm(`Assign Unit ${unitId} to active call?`)) {
-                alert(`Unit ${unitId} assigned successfully`);
-                // Update UI to show unit assigned
-            }
-        }
-        
-        // Update stats every 30 seconds
-        setInterval(updateStats, 30000);
-        
-        // Initial stats update
-        updateStats();
-    </script>
-</body>
-</html>
