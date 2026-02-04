@@ -56,7 +56,7 @@
                         <label for="username" class="field-label">Employee ID / Username</label>
                         <input 
                             type="text" 
-                            id="username" 
+                            id="username" disabled 
                             name="username" 
                             class="field-input"
                             placeholder="Enter your username"
@@ -70,7 +70,7 @@
                         <div class="password-field">
                             <input 
                                 type="password" 
-                                id="password" 
+                                id="password" disabled 
                                 name="password" 
                                 class="field-input"
                                 placeholder="Enter your password"
@@ -93,7 +93,7 @@
                     <div class="form-field">
                         <label for="role" class="field-label">Role</label>
                         <div class="select-wrapper">
-                            <select id="role" name="role" class="field-select" required>
+                            <select id="role" disabled name="role" class="field-select" required>
                                 <option value="">Select your role</option>
                                 <option value="operator">Call Operator</option>
                                 <option value="emt">EMT / Paramedic</option>
@@ -113,11 +113,7 @@
                         </svg>
                     </button>
 
-                    <div class="form-footer">
-                        <p class="footer-text">Don't have an account?</p>
-                        <a href="signup.html" class="link-secondary">Create employee account →</a>
-                    </div>
-                </form>
+                    </form>
             </div>
 
             <!-- Emergency Call Quick Access -->
@@ -169,6 +165,20 @@
         updateDateTime();
         setInterval(updateDateTime, 60000); // Update every minute
     </script>
-    <script src="script.js"></script>
+    <script type="module">
+  import "./config.js";
+  import { startLogin, getCurrentUser, routeByRole } from "./auth.js";
+
+  const form = document.getElementById("signinForm");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    startLogin();
+  });
+
+  const user = getCurrentUser();
+  if (user) {
+    location.href = routeByRole(user);
+  }
+</script>
 </body>
 </html>

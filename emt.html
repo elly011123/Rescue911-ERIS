@@ -372,13 +372,7 @@
                             <div class="user-role">Emergency Medical Technician</div>
                         </div>
                     </div>
-                    <a href="clock_system.html" class="header-icon-btn" title="Time Clock" aria-label="Time Clock">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                    </a>
-                    <button class="btn-logout" onclick="logout()">
+                    <button class="btn-logout" onclick="erisLogout()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; vertical-align: middle; margin-right: 4px;">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
                             <polyline points="16 17 21 12 16 7"/>
@@ -475,9 +469,7 @@
     
     <script>
         // Current user and unit ID
-        const currentUser = JSON.parse(localStorage.getItem('r911.currentUser') || '{}');
-        const unitId = currentUser.employeeId || 'EMT-001';
-        
+                
         // Update current time
         function updateCurrentTime() {
             const now = new Date();
@@ -500,12 +492,6 @@
         }
         
         // Logout
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem('r911.currentUser');
-                localStorage.removeItem('username');
-                window.location.href = 'index.html';
-            }
         }
         
         // Update status
@@ -689,5 +675,27 @@
             addActivity('Logged in to EMT dashboard');
         });
     </script>
+<script type="module">
+  import "./config.js";
+  import { requireAuth, getCurrentUser, logout } from "./auth.js";
+
+  const user = requireAuth(["emt"]);
+  if (user) {
+    const nameEl = document.getElementById("userName");
+    const avatarEl = document.getElementById("userAvatar");
+    if (nameEl) nameEl.textContent = user.username || user.email || "emt";
+    if (avatarEl) {
+      const base = (user.username || user.email || "emt").trim();
+      const initials = base.split(/\s+/).slice(0,2).map(s => s[0]).join("").toUpperCase();
+      avatarEl.textContent = initials || "emt".toUpperCase();
+    }
+  }
+
+  window.erisLogout = function() {
+    if (confirm("Are you sure you want to logout?")) {
+      logout();
+    }
+  };
+</script>
 </body>
 </html>

@@ -363,23 +363,7 @@
             }, 2000);
         }
         
-        // Show call form
-        function showCallForm() {
-            const patientName = prompt('Patient Name:');
-            const phone = prompt('Contact Phone Number:');
-            const address = prompt('Exact Address:');
-            const landmark = prompt('Nearest Landmark:');
-            const description = prompt('Emergency Description:');
-            
-            if (patientName && address && description) {
-                const incomingCall = {
-                    patientName: patientName,
-                    phone: phone || '',
-                    address: address,
-                    landmark: landmark || '',
-                    description: description,
-                    ts: new Date().toISOString()
-                };
+        ;
                 
                 localStorage.setItem('incomingCall', JSON.stringify(incomingCall));
                 
@@ -392,5 +376,43 @@
             }
         }
     </script>
+<script type="module">
+  import "./config.js";
+  import { apiPost } from "./api.js";
+
+  window.showCallForm = async function() {
+    const patientName = prompt("Patient Name:");
+    const phone = prompt("Contact Phone Number:");
+    const address = prompt("Exact Address:");
+    const landmark = prompt("Nearest Landmark:");
+    const description = prompt("Emergency Description:");
+
+    if (patientName && address && description) {
+      const incomingCall = {
+        patientName: patientName,
+        phone: phone || "",
+        address: address,
+        landmark: landmark || "",
+        description: description,
+        ts: new Date().toISOString()
+      };
+
+      try {
+        await apiPost("/calls", incomingCall);
+      } catch (e) {
+        console.error(e);
+      }
+
+      localStorage.setItem("incomingCall", JSON.stringify(incomingCall));
+      window.dispatchEvent(new StorageEvent("storage", {
+        key: "incomingCall",
+        newValue: JSON.stringify(incomingCall)
+      }));
+
+      alert("✓ Call details submitted successfully. Operator has been notified.");
+    }
+  };
+</script>
+
 </body>
 </html>
