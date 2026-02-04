@@ -680,3 +680,26 @@ body {
         text-align: center;
     }
 }
+
+/* Header icon button (used for Time Clock) */
+.header-icon-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+.header-icon-btn:hover {
+    background: var(--color-bg);
+    color: var(--color-primary);
+}
+.header-icon-btn svg {
+    display: block;
+}

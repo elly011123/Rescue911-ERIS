@@ -290,6 +290,12 @@
     </div>
 
     <script>
+        // Require login (redirect to login page if not authenticated)
+        const _currentUserRaw = localStorage.getItem('r911.currentUser');
+        if (!_currentUserRaw) {
+            window.location.href = 'index.html';
+        }
+
         let currentStatus = 'out';
         let employeeId = localStorage.getItem('username') || 'employee_001';
         
