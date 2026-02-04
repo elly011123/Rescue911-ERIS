@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Call - ERIS</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        .call-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFF5F5 0%, #FED7D7 100%);
+            padding: var(--space-2xl) var(--space-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .call-wrapper {
+            width: 100%;
+            max-width: 700px;
+        }
+        
+        .call-card {
+            background: var(--color-bg);
+            border: 2px solid var(--color-primary-light);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            box-shadow: 0 12px 40px rgba(197, 48, 48, 0.15);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .call-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+            padding-bottom: var(--space-xl);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .call-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-lg);
+            animation: pulse-ring 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(197, 48, 48, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 20px rgba(197, 48, 48, 0);
+            }
+        }
+        
+        .call-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .call-subtitle {
+            font-size: 1rem;
+            color: var(--color-text-secondary);
+        }
+        
+        .call-status-display {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-md) 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-label {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+        
+        .status-value {
+            font-size: 0.95rem;
+            color: var(--color-text-primary);
+            font-weight: 600;
+        }
+        
+        .status-value.active {
+            color: var(--color-success);
+        }
+        
+        .call-actions {
+            display: grid;
+            gap: var(--space-md);
+        }
+        
+        .btn-call {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 1.25rem 2rem;
+            border-radius: var(--radius-md);
+            font-family: var(--font-primary);
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-md);
+            box-shadow: 0 4px 16px rgba(197, 48, 48, 0.3);
+        }
+        
+        .btn-call:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(197, 48, 48, 0.4);
+        }
+        
+        .btn-call:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-call.active {
+            background: linear-gradient(135deg, var(--color-success) 0%, #2F855A 100%);
+        }
+        
+        .info-card {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .info-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-md);
+        }
+        
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+        
+        .info-icon {
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+        
+        .warning-banner {
+            background: rgba(221, 107, 32, 0.1);
+            border: 1px solid rgba(221, 107, 32, 0.3);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin-top: var(--space-xl);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            font-size: 0.85rem;
+            color: #744210;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Back to Home
+    </a>
+    
+    <div class="call-page">
+        <div class="call-wrapper">
+            <div class="call-card">
+                <div class="call-header">
+                    <div class="call-icon">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <h1 class="call-title">Emergency Call</h1>
+                    <p class="call-subtitle">Direct line to emergency response operators</p>
+                </div>
+                
+                <div class="call-status-display">
+                    <div class="status-item">
+                        <span class="status-label">Current Time</span>
+                        <span class="status-value" id="callTime">--:--</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Location Status</span>
+                        <span class="status-value" id="location">Detecting...</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Call Status</span>
+                        <span class="status-value" id="callStatus">Ready</span>
+                    </div>
+                </div>
+                
+                <div class="call-actions">
+                    <button class="btn-call" id="callButton" onclick="initiateCall()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        <span>Call Emergency Services</span>
+                    </button>
+                    
+                    <button class="btn-primary" onclick="showCallForm()">
+                        <span>Submit Call Details</span>
+                    </button>
+                </div>
+                
+                <div class="warning-banner">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    <span><strong>Emergency Use Only:</strong> All calls are logged and monitored. Misuse may result in disciplinary action.</span>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3 class="info-title">Emergency Guidelines</h3>
+                <div class="info-list">
+                    <div class="info-item">
+                        <svg class="info-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        <span>Stay calm and speak clearly</span>
+                    </div>
+                    <div class="info-item">
+                        <svg class="info-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        <span>Provide exact location and landmarks</span>
+                    </div>
+                    <div class="info-item">
+                        <svg class="info-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        <span>Describe the emergency clearly</span>
+                    </div>
+                    <div class="info-item">
+                        <svg class="info-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        <span>Follow operator instructions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('callTime').textContent = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // Get location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    document.getElementById('location').textContent = 
+                        `Lat: ${position.coords.latitude.toFixed(4)}, Lon: ${position.coords.longitude.toFixed(4)}`;
+                },
+                function(error) {
+                    document.getElementById('location').textContent = 'Location unavailable';
+                }
+            );
+        } else {
+            document.getElementById('location').textContent = 'Not supported';
+        }
+        
+        // Initiate call
+        function initiateCall() {
+            const callButton = document.getElementById('callButton');
+            const callStatus = document.getElementById('callStatus');
+            
+            callButton.disabled = true;
+            callButton.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                </svg>
+                <span>Connecting...</span>
+            `;
+            callStatus.textContent = 'Connecting to operator...';
+            
+            setTimeout(() => {
+                callStatus.textContent = 'Connected';
+                callStatus.classList.add('active');
+                callButton.classList.add('active');
+                callButton.innerHTML = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    <span>Call Active</span>
+                `;
+                
+                let duration = 0;
+                const timer = setInterval(() => {
+                    duration++;
+                    const minutes = Math.floor(duration / 60);
+                    const seconds = duration % 60;
+                    callStatus.textContent = `Active - ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+                
+                setTimeout(() => {
+                    clearInterval(timer);
+                    callStatus.textContent = 'Call ended';
+                    callStatus.classList.remove('active');
+                    callButton.disabled = false;
+                    callButton.classList.remove('active');
+                    callButton.innerHTML = `
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        <span>Call Emergency Services</span>
+                    `;
+                }, 30000);
+            }, 2000);
+        }
+        
+        // Show call form
+        function showCallForm() {
+            const patientName = prompt('Patient Name:');
+            const phone = prompt('Contact Phone Number:');
+            const address = prompt('Exact Address:');
+            const landmark = prompt('Nearest Landmark:');
+            const description = prompt('Emergency Description:');
+            
+            if (patientName && address && description) {
+                const incomingCall = {
+                    patientName: patientName,
+                    phone: phone || '',
+                    address: address,
+                    landmark: landmark || '',
+                    description: description,
+                    ts: new Date().toISOString()
+                };
+                
+                localStorage.setItem('incomingCall', JSON.stringify(incomingCall));
+                
+                window.dispatchEvent(new StorageEvent('storage', {
+                    key: 'incomingCall',
+                    newValue: JSON.stringify(incomingCall)
+                }));
+                
+                alert('✓ Call details submitted successfully.\nOperator has been notified.');
+            }
+        }
+    </script>
+</body>
+</html>

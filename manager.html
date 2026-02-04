@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard - ERIS</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <script src="events.js"></script>
+    <style>
+        .dashboard {
+            min-height: 100vh;
+            background: var(--color-bg-secondary);
+        }
+        
+        .dashboard-header {
+            background: var(--color-bg);
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--space-lg) var(--space-xl);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+        
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--color-info) 0%, #2563EB 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .header-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .header-text p {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius-md);
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--color-info);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+        
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--color-text-tertiary);
+        }
+        
+        .btn-logout {
+            background: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            font-family: var(--font-primary);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .btn-logout:hover {
+            background: var(--color-bg);
+            color: var(--color-text-primary);
+            border-color: var(--color-border-dark);
+        }
+        
+        .dashboard-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: var(--space-xl);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .stat-card {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+        
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-secondary);
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            font-family: var(--font-mono);
+        }
+        
+        .stat-change {
+            font-size: 0.8rem;
+            margin-top: var(--space-xs);
+        }
+        
+        .stat-change.positive {
+            color: var(--color-success);
+        }
+        
+        .stat-change.negative {
+            color: var(--color-primary);
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .card {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: var(--space-sm);
+        }
+        
+        .icon-btn {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            color: var(--color-text-secondary);
+        }
+        
+        .icon-btn:hover {
+            background: var(--color-bg-tertiary);
+            color: var(--color-text-primary);
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: var(--color-bg-secondary);
+        }
+        
+        th {
+            text-align: left;
+            padding: var(--space-md);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        td {
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--color-border);
+            color: var(--color-text-primary);
+            font-size: 0.9rem;
+        }
+        
+        tbody tr:hover {
+            background: var(--color-bg-secondary);
+        }
+        
+        .status-badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-available {
+            background: #C6F6D5;
+            color: #22543D;
+        }
+        
+        .status-on-scene {
+            background: #E9D5FF;
+            color: #5B21B6;
+        }
+        
+        .status-transporting {
+            background: #BFDBFE;
+            color: #1E3A8A;
+        }
+        
+        .status-off-duty {
+            background: #E2E8F0;
+            color: #475569;
+        }
+        
+        .event-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .event-item {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-left: 4px solid var(--color-info);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+        }
+        
+        .event-time {
+            font-size: 0.8rem;
+            color: var(--color-text-tertiary);
+            font-family: var(--font-mono);
+            margin-bottom: var(--space-xs);
+        }
+        
+        .event-text {
+            font-size: 0.95rem;
+            color: var(--color-text-primary);
+            font-weight: 500;
+        }
+        
+        .event-meta {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-top: var(--space-xs);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: var(--space-2xl);
+            color: var(--color-text-tertiary);
+        }
+        
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-content {
+                padding: var(--space-md);
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <div class="header-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                    </div>
+                    <div class="header-text">
+                        <h1>Manager Dashboard</h1>
+                        <p id="currentTime">Loading...</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">MG</div>
+                        <div class="user-details">
+                            <div class="user-name" id="userName">Manager</div>
+                            <div class="user-role">System Manager</div>
+                        </div>
+                    </div>
+                    <button class="btn-logout" onclick="logout()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; vertical-align: middle; margin-right: 4px;">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <main class="dashboard-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                        </div>
+                        <div class="stat-label">Total Calls Today</div>
+                    </div>
+                    <div class="stat-value" id="totalCalls">0</div>
+                    <div class="stat-change positive">↑ 0% from yesterday</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="8.5" cy="7" r="4"/>
+                                <polyline points="17 11 19 13 23 9"/>
+                            </svg>
+                        </div>
+                        <div class="stat-label">Active EMTs</div>
+                    </div>
+                    <div class="stat-value" id="activeEmts">0</div>
+                    <div class="stat-change">3 available</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <div class="stat-label">Avg Response Time</div>
+                    </div>
+                    <div class="stat-value" style="font-size: 1.75rem;">8:42</div>
+                    <div class="stat-change positive">↓ 12% faster</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="stat-label">On-duty Staff</div>
+                    </div>
+                    <div class="stat-value" id="onDutyStaff">0</div>
+                    <div class="stat-change">2 operators, 3 EMTs</div>
+                </div>
+            </div>
+            
+            <div class="main-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">EMT Unit Status</h2>
+                        <div class="card-actions">
+                            <button class="icon-btn" onclick="refreshEMTTable()" title="Refresh">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"/>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Unit ID</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Location</th>
+                                    <th>Last Update</th>
+                                </tr>
+                            </thead>
+                            <tbody id="emtTableBody">
+                                <tr>
+                                    <td colspan="5" class="empty-state">Loading EMT units...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Events</h2>
+                    </div>
+                    <div class="event-list" id="eventList">
+                        <div class="empty-state">No recent events</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Update current time
+        function updateCurrentTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        updateCurrentTime();
+        setInterval(updateCurrentTime, 30000);
+        
+        // Load user info
+        const currentUser = JSON.parse(localStorage.getItem('r911.currentUser') || '{}');
+        if (currentUser.name) {
+            document.getElementById('userName').textContent = currentUser.name;
+            const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+            document.getElementById('userAvatar').textContent = initials;
+        }
+        
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('r911.currentUser');
+                localStorage.removeItem('username');
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // Refresh EMT table
+        function refreshEMTTable() {
+            loadEMTUnits();
+        }
+        
+        // Load EMT units
+        function loadEMTUnits() {
+            try {
+                const stored = localStorage.getItem('emt-units');
+                const units = stored ? JSON.parse(stored) : [];
+                
+                const tbody = document.getElementById('emtTableBody');
+                
+                if (units.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No EMT units available</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = units.map(unit => {
+                    const statusClass = 'status-' + (unit.status || 'off-duty').replace(' ', '-');
+                    const lastUpdate = unit.lastUpdate ? new Date(unit.lastUpdate).toLocaleTimeString() : '--:--';
+                    
+                    return `
+                        <tr>
+                            <td><strong>${unit.id}</strong></td>
+                            <td>${unit.name || 'Unknown'}</td>
+                            <td><span class="status-badge ${statusClass}">${(unit.status || 'off-duty').replace('-', ' ')}</span></td>
+                            <td>${unit.location || 'Unknown'}</td>
+                            <td style="font-family: var(--font-mono); font-size: 0.85rem;">${lastUpdate}</td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                // Update stats
+                const activeCount = units.filter(u => u.status && u.status !== 'off-duty').length;
+                document.getElementById('activeEmts').textContent = activeCount;
+                document.getElementById('onDutyStaff').textContent = units.length;
+            } catch (error) {
+                console.error('Error loading EMT units:', error);
+            }
+        }
+        
+        // Load events
+        function loadEvents() {
+            if (typeof ERIS === 'undefined') return;
+            
+            const events = ERIS.loadEvents();
+            const eventList = document.getElementById('eventList');
+            
+            if (events.length === 0) {
+                eventList.innerHTML = '<div class="empty-state">No recent events</div>';
+                return;
+            }
+            
+            eventList.innerHTML = events.slice(-20).reverse().map(event => {
+                const time = new Date(event.timestamp).toLocaleTimeString();
+                const text = ERIS ? formatEvent(event) : event.type;
+                
+                return `
+                    <div class="event-item">
+                        <div class="event-time">${time}</div>
+                        <div class="event-text">${text}</div>
+                        ${event.location ? `<div class="event-meta">Location: ${event.location}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function formatEvent(ev) {
+            if (ev.type === 'emt.reached') return `EMT ${ev.unit} reached ${ev.location}`;
+            if (ev.type === 'emt.left') return `EMT ${ev.unit} left ${ev.location}`;
+            if (ev.type === 'emt.position') return `EMT ${ev.unit} updated position`;
+            return ev.type;
+        }
+        
+        // Subscribe to ERIS events
+        if (typeof ERIS !== 'undefined') {
+            ERIS.subscribe(function(signal) {
+                loadEvents();
+            });
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadEMTUnits();
+            loadEvents();
+            
+            // Refresh EMT table every 10 seconds
+            setInterval(loadEMTUnits, 10000);
+            
+            // Update total calls (mock data)
+            document.getElementById('totalCalls').textContent = Math.floor(Math.random() * 50) + 20;
+        });
+    </script>
+</body>
+</html>
